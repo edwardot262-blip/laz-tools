@@ -1240,6 +1240,106 @@
             }
         }
 
+        /* ===== GAMERTAG GENERATOR ===== */
+        .gamertag-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .control-group label {
+            min-width: 80px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .control-group select,
+        .control-group input[type="range"] {
+            flex: 1;
+            padding: 8px 12px;
+            background: var(--bg-base);
+            border: 1px solid var(--bg-border);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+            font-family: var(--font-sans);
+        }
+
+        .control-group input[type="range"] {
+            padding: 0;
+        }
+
+        .control-group input[type="range"]::-webkit-slider-thumb {
+            background: var(--accent-primary);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #countDisplay {
+            min-width: 30px;
+            text-align: center;
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .gamertag-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .gamertag-item {
+            background: var(--bg-base);
+            border: 1px solid var(--bg-border);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all var(--transition);
+        }
+
+        .gamertag-item:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+        }
+
+        .gamertag-text {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--accent-primary);
+            font-weight: 600;
+        }
+
+        .gamertag-copy-btn {
+            background: var(--accent-primary);
+            border: none;
+            color: var(--bg-base);
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all var(--transition);
+        }
+
+        .gamertag-copy-btn:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        .gamertag-copy-btn.copied {
+            background: var(--accent-secondary);
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 900px) {
             .json-container {
@@ -1364,6 +1464,14 @@
                         </svg>
                     </span>
                     <span class="nav-label">Pokemon</span>
+                </a>
+                <a class="nav-item" data-tool="gamertag" title="Gamertag Generator">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"/><text x="12" y="15" text-anchor="middle" font-size="8" fill="currentColor">GT</text>
+                        </svg>
+                    </span>
+                    <span class="nav-label">Gamertag Gen</span>
                 </a>
             </nav>
 
@@ -1879,6 +1987,41 @@
                     </div>
                 </div>
             </div>
+
+            <!-- GAMERTAG GENERATOR PANEL -->
+            <div id="panel-gamertag" class="tool-panel">
+                <div class="panel-header">
+                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Gamertag Generator</h1>
+                    <p class="panel-subtitle">Generate cool usernames and gamertags</p>
+                </div>
+                <div class="panel-body">
+                    <div class="card">
+                        <div class="card-title">Generate Gamertags</div>
+                        <div class="gamertag-controls">
+                            <div class="control-group">
+                                <label for="gamertagStyle">Style:</label>
+                                <select id="gamertagStyle">
+                                    <option value="fantasy">Fantasy</option>
+                                    <option value="tech">Tech</option>
+                                    <option value="cool">Cool</option>
+                                    <option value="animal">Animal</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label for="gamertagCount">Quantity:</label>
+                                <input type="range" id="gamertagCount" min="1" max="10" value="5">
+                                <span id="countDisplay">5</span>
+                            </div>
+                            <button id="generateBtn" class="btn btn-primary">Generate</button>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 20px;">
+                        <div class="card-title">Your Gamertags</div>
+                        <div id="gamertagList" class="gamertag-list"></div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -1945,6 +2088,7 @@
                 WorldTime.init();
                 UniversalClock.init();
                 PokemonGame.init();
+                GamertagGenerator.init();
             },
 
             switchTool(toolId) {
@@ -3153,6 +3297,58 @@
                 const timestamp = new Date().toLocaleTimeString();
                 logBox.value += `[${timestamp}] ${message}\n`;
                 logBox.scrollTop = logBox.scrollHeight;
+            }
+        };
+
+        // ===== GAMERTAG GENERATOR MODULE =====
+        const GamertagGenerator = {
+            styles: {
+                fantasy: ['Ember', 'Shadow', 'Frost', 'Storm', 'Dragon', 'Phoenix', 'Raven', 'Wolf', 'Viper', 'Blade', 'Knight', 'Sage', 'Mystic', 'Lunar', 'Solar'],
+                tech: ['Cyber', 'Nexus', 'Volt', 'Pixel', 'Code', 'Matrix', 'Byte', 'Circuit', 'Stream', 'Sync', 'Pulse', 'Logic', 'Data', 'Turbo', 'Nova'],
+                cool: ['Ace', 'Boss', 'King', 'Pro', 'Elite', 'Ninja', 'Titan', 'Slick', 'Swift', 'Sniper', 'Ghost', 'Venom', 'Blaze', 'Void', 'Peak'],
+                animal: ['Tiger', 'Eagle', 'Shark', 'Falcon', 'Panther', 'Cobra', 'Lynx', 'Reaper', 'Badger', 'Rook', 'Mantis', 'Jackal', 'Puma', 'Orca', 'Hawk']
+            },
+            suffixes: ['X', 'Z', '99', '2K', 'Pro', 'Max', 'Ultra', 'Prime', 'Elite', 'Apex', '007', 'Fury', 'Force', 'Master', 'Legend'],
+
+            init() {
+                document.getElementById('generateBtn').addEventListener('click', () => this.generate());
+                document.getElementById('gamertagCount').addEventListener('input', (e) => {
+                    document.getElementById('countDisplay').textContent = e.target.value;
+                });
+            },
+
+            generate() {
+                const style = document.getElementById('gamertagStyle').value;
+                const count = parseInt(document.getElementById('gamertagCount').value);
+                const list = document.getElementById('gamertagList');
+
+                list.innerHTML = '';
+                const generated = new Set();
+
+                for (let i = 0; i < count; i++) {
+                    let tag;
+                    do {
+                        tag = this.generateOne(style);
+                    } while (generated.has(tag));
+                    generated.add(tag);
+
+                    const item = document.createElement('div');
+                    item.className = 'gamertag-item';
+                    item.innerHTML = `
+                        <span class="gamertag-text">${tag}</span>
+                        <button class="gamertag-copy-btn" onclick="this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 2000); navigator.clipboard.writeText('${tag}')">Copy</button>
+                    `;
+                    list.appendChild(item);
+                }
+            },
+
+            generateOne(style) {
+                const words = this.styles[style];
+                const word = words[Math.floor(Math.random() * words.length)];
+                const suffix = Math.random() > 0.6 ? this.suffixes[Math.floor(Math.random() * this.suffixes.length)] : '';
+                const number = Math.random() > 0.5 ? Math.floor(Math.random() * 999) : '';
+
+                return word + suffix + number;
             }
         };
 
