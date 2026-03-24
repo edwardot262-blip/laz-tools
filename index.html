@@ -949,6 +949,145 @@
             margin-top: 6px;
         }
 
+        /* ===== UNIVERSAL CLOCK TOOL ===== */
+        .uniclock-main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .uniclock-utc {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            border-radius: 50%;
+            background: var(--bg-elevated);
+            border: 3px solid var(--accent-primary);
+            box-shadow: 0 0 40px var(--accent-glow), inset 0 0 30px rgba(0, 212, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .uniclock-center-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        .uniclock-hand {
+            position: absolute;
+            background: var(--accent-primary);
+            transform-origin: bottom center;
+            left: 50%;
+        }
+
+        .uniclock-hand-hour {
+            width: 6px;
+            height: 80px;
+            margin-left: -3px;
+            margin-bottom: 0;
+        }
+
+        .uniclock-hand-minute {
+            width: 4px;
+            height: 110px;
+            margin-left: -2px;
+            margin-bottom: 0;
+            opacity: 0.8;
+        }
+
+        .uniclock-hand-second {
+            width: 2px;
+            height: 120px;
+            margin-left: -1px;
+            margin-bottom: 0;
+            background: #ff6b6b;
+            opacity: 0.9;
+        }
+
+        .uniclock-labels {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .uniclock-label {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .uniclock-digital {
+            font-family: var(--font-mono);
+            font-size: 48px;
+            color: var(--accent-primary);
+            font-weight: 600;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+
+        .uniclock-digital-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .uniclock-cities {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            width: 100%;
+        }
+
+        .uniclock-city-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--bg-border);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            text-align: center;
+            transition: all var(--transition);
+        }
+
+        .uniclock-city-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 12px var(--accent-glow);
+        }
+
+        .uniclock-city-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .uniclock-city-time {
+            font-family: var(--font-mono);
+            font-size: 24px;
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .uniclock-city-tz {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+        }
+
         /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar {
             width: 8px;
@@ -1076,6 +1215,14 @@
                         </svg>
                     </span>
                     <span class="nav-label">World Time</span>
+                </a>
+                <a class="nav-item" data-tool="uniclock" title="Universal Clock">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/><circle cx="12" cy="12" r="2"/>
+                        </svg>
+                    </span>
+                    <span class="nav-label">Universal Clock</span>
                 </a>
             </nav>
 
@@ -1513,6 +1660,39 @@
                     </div>
                 </div>
             </div>
+
+            <!-- UNIVERSAL CLOCK PANEL -->
+            <div id="panel-uniclock" class="tool-panel">
+                <div class="panel-header">
+                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Universal Clock</h1>
+                    <p class="panel-subtitle">Live analog clock and city time display</p>
+                </div>
+                <div class="panel-body">
+                    <div class="uniclock-main">
+                        <div style="text-align: center;">
+                            <div class="uniclock-utc">
+                                <div class="uniclock-labels">
+                                    <div class="uniclock-label" style="top: 10px;">12</div>
+                                    <div class="uniclock-label" style="right: 10px; top: 50%; transform: translateY(-50%);">3</div>
+                                    <div class="uniclock-label" style="bottom: 10px;">6</div>
+                                    <div class="uniclock-label" style="left: 10px; top: 50%; transform: translateY(-50%);">9</div>
+                                </div>
+                                <div class="uniclock-hand uniclock-hand-hour" id="uniclockHour"></div>
+                                <div class="uniclock-hand uniclock-hand-minute" id="uniclockMinute"></div>
+                                <div class="uniclock-hand uniclock-hand-second" id="uniclockSecond"></div>
+                                <div class="uniclock-center-dot"></div>
+                            </div>
+                            <div class="uniclock-digital" id="uniclockDigital">00:00:00</div>
+                            <div class="uniclock-digital-label">UTC Time</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 40px;">
+                        <div class="card-title">Major Cities</div>
+                        <div class="uniclock-cities" id="uniclockCities"></div>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -1577,6 +1757,7 @@
                 PasswordGen.init();
                 ColorTools.init();
                 WorldTime.init();
+                UniversalClock.init();
             },
 
             switchTool(toolId) {
@@ -2551,6 +2732,78 @@
                 this.renderCities();
                 // Update cities every second
                 setInterval(() => this.renderCities(), 1000);
+            }
+        };
+
+        // ===== UNIVERSAL CLOCK MODULE =====
+        const UniversalClock = {
+            cities: [
+                { name: 'New York', tz: 'America/New_York' },
+                { name: 'London', tz: 'Europe/London' },
+                { name: 'Tokyo', tz: 'Asia/Tokyo' },
+                { name: 'Sydney', tz: 'Australia/Sydney' },
+                { name: 'Dubai', tz: 'Asia/Dubai' },
+                { name: 'Singapore', tz: 'Asia/Singapore' },
+                { name: 'Paris', tz: 'Europe/Paris' },
+                { name: 'Hong Kong', tz: 'Asia/Hong_Kong' }
+            ],
+
+            updateClock() {
+                const now = new Date();
+                const hours = now.getUTCHours();
+                const minutes = now.getUTCMinutes();
+                const seconds = now.getUTCSeconds();
+
+                // Update digital clock
+                const digital = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                document.getElementById('uniclockDigital').textContent = digital;
+
+                // Update analog clock hands
+                const hourDeg = (hours % 12 * 30) + (minutes * 0.5);
+                const minuteDeg = minutes * 6 + (seconds * 0.1);
+                const secondDeg = seconds * 6;
+
+                document.getElementById('uniclockHour').style.transform = `rotate(${hourDeg}deg)`;
+                document.getElementById('uniclockMinute').style.transform = `rotate(${minuteDeg}deg)`;
+                document.getElementById('uniclockSecond').style.transform = `rotate(${secondDeg}deg)`;
+            },
+
+            formatTimeForTz(date, tz) {
+                const formatter = new Intl.DateTimeFormat('en-US', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    timeZone: tz
+                });
+                return formatter.format(date);
+            },
+
+            renderCities() {
+                const now = new Date();
+                const citiesDiv = document.getElementById('uniclockCities');
+                citiesDiv.innerHTML = '';
+
+                this.cities.forEach(city => {
+                    const time = this.formatTimeForTz(now, city.tz);
+                    const card = document.createElement('div');
+                    card.className = 'uniclock-city-card';
+                    card.innerHTML = `
+                        <div class="uniclock-city-name">${city.name}</div>
+                        <div class="uniclock-city-time">${time}</div>
+                        <div class="uniclock-city-tz">${city.tz}</div>
+                    `;
+                    citiesDiv.appendChild(card);
+                });
+            },
+
+            init() {
+                this.updateClock();
+                this.renderCities();
+                // Update every second
+                setInterval(() => {
+                    this.updateClock();
+                    this.renderCities();
+                }, 1000);
             }
         };
 
