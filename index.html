@@ -3,1097 +3,515 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LAZ Tools — Tech Utilities Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>Edward - Desktop Engineer → AI Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        /* ===== RESET & BASE ===== */
+        /* ===== RESET ===== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        html, body {
-            height: 100%;
-            width: 100%;
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            background: #0a0e14;
-            color: #e2e8f0;
             font-family: 'Inter', system-ui, sans-serif;
-            overflow: hidden;
-        }
-
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 0, 0, 0.03) 2px,
-                rgba(0, 0, 0, 0.03) 4px
-            );
-            pointer-events: none;
-            z-index: 9999;
+            background: #f7f3ee;
+            color: #2c2419;
+            line-height: 1.6;
         }
 
         /* ===== CSS VARIABLES ===== */
         :root {
-            --bg-base: #0a0e14;
-            --bg-sidebar: #0d1117;
-            --bg-surface: #111827;
-            --bg-elevated: #1a2233;
-            --bg-border: #1e2d3d;
+            --bg-base: #f7f3ee;
+            --bg-surface: #ede8e0;
+            --bg-elevated: #e2dbd0;
+            --bg-border: #c8c0b4;
 
-            --accent-primary: #00d4ff;
-            --accent-glow: rgba(0, 212, 255, 0.15);
-            --accent-secondary: #00ff9d;
-            --accent-warning: #ffb300;
-            --accent-danger: #ff4466;
+            --accent-primary: #5c7a4e;
+            --accent-secondary: #a0714a;
+            --accent-warm: #c4884a;
+            --accent-light: #8ba85f;
 
-            --text-primary: #e2e8f0;
-            --text-secondary: #7a8fa6;
-            --text-muted: #3d5166;
+            --text-primary: #2c2419;
+            --text-secondary: #6b5d4f;
+            --text-muted: #9d9082;
 
-            --sidebar-width-open: 220px;
-            --sidebar-width-collapsed: 56px;
-
-            --radius-sm: 4px;
             --radius-md: 8px;
             --radius-lg: 12px;
-            --transition: 0.2s ease;
-            --font-mono: 'JetBrains Mono', monospace;
-            --font-sans: 'Inter', system-ui, sans-serif;
+            --transition: 0.3s ease;
         }
 
         /* ===== TYPOGRAPHY ===== */
-        h1, h2, h3 { font-weight: 600; }
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
 
-        .panel-title {
-            font-size: 22px;
+        h1 {
+            font-size: 56px;
+            line-height: 1.1;
             color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        .panel-title-prefix {
-            color: var(--accent-primary);
-            font-family: var(--font-mono);
-        }
-
-        .panel-subtitle {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 6px;
-        }
-
-        /* ===== LAYOUT ===== */
-        #app {
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* ===== SIDEBAR ===== */
-        .sidebar {
-            width: var(--sidebar-width-open);
-            background: var(--bg-sidebar);
-            border-right: 1px solid var(--bg-border);
-            flex-shrink: 0;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            transition: width var(--transition);
-            z-index: 100;
-        }
-
-        .sidebar.collapsed {
-            width: var(--sidebar-width-collapsed);
-        }
-
-        .sidebar-header {
-            padding: 20px 16px;
-            border-bottom: 1px solid var(--bg-border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-        }
-
-        .logo-icon {
-            font-family: var(--font-mono);
-            font-size: 20px;
-            color: var(--accent-primary);
-            font-weight: 600;
-        }
-
-        .logo-text {
-            font-weight: 600;
-            font-size: 14px;
+        h2 {
+            font-size: 42px;
             color: var(--text-primary);
-            flex: 1;
-            white-space: nowrap;
-            transition: opacity var(--transition);
+            margin-bottom: 32px;
         }
 
-        .sidebar.collapsed .logo-text {
-            opacity: 0;
-            pointer-events: none;
+        h3 {
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: 16px;
         }
 
-        .collapse-btn {
-            background: none;
-            border: none;
-            color: var(--accent-primary);
-            cursor: pointer;
-            padding: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform var(--transition);
-            font-size: 16px;
-        }
-
-        .sidebar.collapsed .collapse-btn {
-            transform: rotate(180deg);
-        }
-
-        .sidebar-nav {
-            flex: 1;
-            padding: 12px 8px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
-            border-radius: var(--radius-md);
-            cursor: pointer;
+        p {
             color: var(--text-secondary);
-            transition: all var(--transition);
+            margin-bottom: 16px;
+        }
+
+        a {
+            color: var(--accent-primary);
             text-decoration: none;
-            user-select: none;
-            white-space: nowrap;
-            border-left: 3px solid transparent;
+            transition: color var(--transition);
         }
 
-        .nav-item:hover {
-            background: rgba(0, 212, 255, 0.08);
-            color: var(--text-primary);
+        a:hover {
+            color: var(--accent-warm);
         }
 
-        .nav-item.active {
-            background: rgba(0, 212, 255, 0.12);
-            color: var(--accent-primary);
-            border-left-color: var(--accent-primary);
-            box-shadow: inset 3px 0 0 var(--accent-primary), 0 0 20px var(--accent-glow);
+        /* ===== HEADER & NAV ===== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(237, 232, 224, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--bg-border);
+            z-index: 1000;
+            padding: 16px 0;
         }
 
-        .sidebar.collapsed .nav-item {
-            justify-content: center;
-            gap: 0;
+        header.scrolled {
+            padding: 8px 0;
+            box-shadow: 0 2px 8px rgba(44, 36, 25, 0.08);
         }
 
-        .nav-icon {
+        nav {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
         }
 
-        .nav-label {
-            transition: opacity var(--transition);
-            font-size: 13px;
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-primary);
         }
 
-        .sidebar.collapsed .nav-label {
-            opacity: 0;
-            pointer-events: none;
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 40px;
         }
 
-        .sidebar-footer {
-            padding: 12px 16px;
-            border-top: 1px solid var(--bg-border);
-            font-size: 11px;
-            color: var(--text-muted);
-            text-align: center;
-            transition: opacity var(--transition);
+        nav a {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: color var(--transition);
         }
 
-        .sidebar.collapsed .sidebar-footer {
-            opacity: 0;
-            pointer-events: none;
+        nav a.active {
+            color: var(--accent-primary);
+            border-bottom: 2px solid var(--accent-primary);
+            padding-bottom: 4px;
+        }
+
+        nav a:hover {
+            color: var(--accent-primary);
         }
 
         /* ===== MAIN CONTENT ===== */
-        .main-content {
-            flex: 1;
-            overflow-y: auto;
-            background: var(--bg-base);
-            padding: 32px 40px;
+        main {
+            margin-top: 80px;
         }
 
-        /* ===== PANEL SYSTEM ===== */
-        .tool-panel {
-            display: none;
-            animation: panelFadeIn 0.18s ease;
+        section {
+            padding: 120px 40px;
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
-        .tool-panel.active {
-            display: block;
+        /* ===== HERO ===== */
+        #hero {
+            padding: 140px 40px 120px;
+            background: linear-gradient(135deg, rgba(92, 122, 78, 0.05) 0%, rgba(160, 113, 74, 0.05) 100%);
         }
 
-        @keyframes panelFadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to   { opacity: 1; transform: translateY(0); }
+        .hero-content h1 {
+            margin-bottom: 16px;
         }
 
-        .panel-header {
-            padding-bottom: 24px;
-            margin-bottom: 24px;
-            border-bottom: 1px solid var(--bg-border);
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            max-width: 600px;
         }
 
-        .panel-body {
-            animation: panelFadeIn 0.18s ease;
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
         }
 
-        /* ===== SHARED COMPONENTS ===== */
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 12px 32px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--accent-primary);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-warm);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(92, 122, 78, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--accent-primary);
+            border: 2px solid var(--accent-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(92, 122, 78, 0.05);
+        }
+
+        /* ===== CARDS ===== */
         .card {
             background: var(--bg-surface);
             border: 1px solid var(--bg-border);
             border-radius: var(--radius-lg);
             padding: 24px;
-            margin-bottom: 20px;
-        }
-
-        .card-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-        }
-
-        /* Inputs */
-        input[type="text"],
-        input[type="number"],
-        input[type="range"],
-        input[type="datetime-local"],
-        input[type="color"],
-        textarea,
-        select {
-            background: var(--bg-elevated);
-            border: 1px solid var(--bg-border);
-            color: var(--text-primary);
-            border-radius: var(--radius-md);
-            padding: 10px 14px;
-            font-size: 14px;
-            font-family: inherit;
-            transition: border-color var(--transition), box-shadow var(--transition);
-            width: 100%;
-        }
-
-        input[type="text"]:focus,
-        input[type="number"]:focus,
-        input[type="datetime-local"]:focus,
-        input[type="color"]:focus,
-        textarea:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 2px var(--accent-glow);
-        }
-
-        textarea {
-            font-family: var(--font-mono);
-            resize: vertical;
-            line-height: 1.5;
-        }
-
-        /* Labels */
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-            font-weight: 500;
-            font-size: 13px;
-        }
-
-        .input-group {
-            margin-bottom: 16px;
-        }
-
-        .input-row {
-            display: flex;
-            gap: 16px;
-            align-items: flex-end;
-            margin-bottom: 16px;
-            flex-wrap: wrap;
-        }
-
-        .input-row .input-group {
-            flex: 1;
-            min-width: 200px;
-            margin-bottom: 0;
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
             transition: all var(--transition);
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
         }
 
-        .btn-primary {
-            background: var(--accent-primary);
-            color: var(--bg-base);
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 0 16px rgba(0, 212, 255, 0.35);
-            transform: translateY(-1px);
-        }
-
-        .btn-success {
-            background: var(--accent-secondary);
-            color: var(--bg-base);
-        }
-
-        .btn-success:hover {
-            box-shadow: 0 0 16px rgba(0, 255, 157, 0.35);
-            transform: translateY(-1px);
-        }
-
-        .btn-danger {
-            background: var(--accent-danger);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            box-shadow: 0 0 16px rgba(255, 68, 102, 0.35);
-            transform: translateY(-1px);
-        }
-
-        .btn-ghost {
-            background: transparent;
-            border: 1px solid var(--bg-border);
-            color: var(--text-secondary);
-        }
-
-        .btn-ghost:hover {
-            background: rgba(0, 212, 255, 0.08);
+        .card:hover {
             border-color: var(--accent-primary);
-            color: var(--text-primary);
+            box-shadow: 0 8px 24px rgba(92, 122, 78, 0.1);
+            transform: translateY(-4px);
         }
 
-        .btn-sm {
-            padding: 6px 12px;
+        /* ===== ABOUT SECTION ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-content h3 {
+            color: var(--accent-primary);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .about-badge {
+            display: inline-block;
+            background: rgba(92, 122, 78, 0.1);
+            color: var(--accent-primary);
+            padding: 8px 16px;
+            border-radius: 20px;
             font-size: 12px;
+            font-weight: 600;
+            margin-top: 24px;
         }
 
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            padding: 0;
-            border-radius: var(--radius-md);
-        }
-
-        /* Badges */
-        .badge {
-            display: inline-flex;
+        .about-image {
+            width: 100%;
+            height: 400px;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-lg);
+            border: 2px dashed var(--bg-border);
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 4px 12px;
-            background: var(--bg-elevated);
-            border: 1px solid var(--bg-border);
-            border-radius: 12px;
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-family: var(--font-mono);
-            gap: 4px;
+            color: var(--text-muted);
+            font-size: 14px;
         }
 
-        .badge-value {
+        /* ===== SKILLS SECTION ===== */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .skill-group h3 {
+            font-size: 20px;
+            margin-bottom: 24px;
             color: var(--accent-primary);
-            font-weight: 600;
         }
 
-        /* ===== DEVICE RECORDS TOOL ===== */
-        .devices-form-group {
+        .skill-list {
             display: flex;
-            gap: 16px;
-            align-items: flex-end;
             flex-wrap: wrap;
-            margin-bottom: 16px;
+            gap: 12px;
         }
 
-        .devices-input-field {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .devices-table {
-            width: 100%;
-            border-collapse: collapse;
+        .skill-badge {
             background: var(--bg-surface);
             border: 1px solid var(--bg-border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-        }
-
-        .devices-table thead {
-            background: var(--bg-elevated);
-            border-bottom: 1px solid var(--bg-border);
-        }
-
-        .devices-table th {
-            padding: 12px;
-            text-align: left;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-family: var(--font-mono);
-        }
-
-        .devices-table td {
-            padding: 12px;
-            border-bottom: 1px solid var(--bg-border);
-            color: var(--text-primary);
-            font-size: 14px;
-        }
-
-        .devices-table tbody tr:hover {
-            background: var(--bg-elevated);
-        }
-
-        .devices-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .devices-action-cell {
-            text-align: center;
-            width: 50px;
-        }
-
-        .devices-empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-muted);
-        }
-
-        .devices-table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .devices-table-header h2 {
-            font-size: 16px;
-            color: var(--text-primary);
-        }
-
-        .devices-record-count {
-            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 20px;
             font-size: 13px;
-        }
-
-        /* ===== TOAST ===== */
-        #toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: var(--bg-elevated);
-            border: 1px solid var(--accent-primary);
-            border-left: 3px solid var(--accent-primary);
-            color: var(--text-primary);
-            padding: 12px 20px;
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            transform: translateX(120%);
-            transition: transform var(--transition);
-            z-index: 10000;
-            max-width: 300px;
-            animation: toastSlideIn 0.3s ease;
-        }
-
-        #toast.show {
-            transform: translateX(0);
-        }
-
-        #toast.error {
-            border-color: var(--accent-danger);
-            border-left-color: var(--accent-danger);
-        }
-
-        #toast.success {
-            border-color: var(--accent-secondary);
-            border-left-color: var(--accent-secondary);
-        }
-
-        @keyframes toastSlideIn {
-            from { transform: translateX(120%); }
-            to   { transform: translateX(0); }
-        }
-
-        /* ===== JSON TOOL ===== */
-        .json-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .json-column {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .json-textarea {
-            flex: 1;
-            min-height: 300px;
-        }
-
-        .json-controls {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .json-stats {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-
-        .json-error {
-            color: var(--accent-danger);
-            font-size: 12px;
-            margin-top: 8px;
-        }
-
-        /* ===== TEXT TOOLS ===== */
-        .text-textarea {
-            min-height: 250px;
-            margin-bottom: 16px;
-        }
-
-        .text-stats {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .text-conversions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 8px;
-        }
-
-        /* ===== TIMESTAMP TOOL ===== */
-        .timestamp-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .timestamp-clock {
-            background: var(--bg-elevated);
-            border: 1px solid var(--bg-border);
-            padding: 16px;
-            border-radius: var(--radius-lg);
-            margin-bottom: 16px;
-            font-family: var(--font-mono);
-            text-align: center;
-        }
-
-        .timestamp-clock-value {
-            font-size: 18px;
-            color: var(--accent-primary);
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .timestamp-clock-label {
-            font-size: 11px;
             color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .timestamp-output {
-            margin-top: 16px;
-            font-family: var(--font-mono);
-            font-size: 13px;
-        }
-
-        .timestamp-output-line {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 8px;
-            padding: 8px;
-            background: var(--bg-elevated);
-            border-radius: var(--radius-md);
-        }
-
-        .timestamp-output-label {
-            color: var(--text-secondary);
-            min-width: 120px;
-        }
-
-        .timestamp-output-value {
-            color: var(--accent-primary);
-            word-break: break-all;
-        }
-
-        /* ===== PASSWORD TOOL ===== */
-        .password-options {
-            margin-bottom: 24px;
-        }
-
-        .password-option-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .password-checkbox {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .password-checkbox input[type="checkbox"] {
-            width: auto;
-            height: 18px;
-            accent-color: var(--accent-primary);
-            cursor: pointer;
-        }
-
-        .password-length-display {
-            font-family: var(--font-mono);
-            color: var(--accent-primary);
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .password-strength-bar {
-            display: flex;
-            gap: 4px;
-            margin-top: 8px;
-            height: 4px;
-        }
-
-        .password-strength-segment {
-            flex: 1;
-            border-radius: 2px;
-            background: var(--bg-border);
-            transition: background var(--transition);
-        }
-
-        .password-strength-segment.filled.weak {
-            background: var(--accent-danger);
-        }
-
-        .password-strength-segment.filled.fair {
-            background: var(--accent-warning);
-        }
-
-        .password-strength-segment.filled.good {
-            background: #a8e63d;
-        }
-
-        .password-strength-segment.filled.strong {
-            background: var(--accent-secondary);
-        }
-
-        .password-strength-label {
-            font-size: 12px;
-            margin-top: 8px;
-            color: var(--text-secondary);
-        }
-
-        .password-output {
-            min-height: 120px;
-            margin-bottom: 12px;
-        }
-
-        /* ===== COLOR TOOL ===== */
-        .color-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-
-        .color-preview {
-            height: 80px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--bg-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--font-mono);
-            font-weight: 600;
-            font-size: 14px;
-            margin: 16px 0;
-            transition: background-color var(--transition);
-        }
-
-        .color-input-row {
-            display: flex;
-            gap: 12px;
-            align-items: flex-end;
-            margin-bottom: 16px;
-        }
-
-        .color-input-group {
-            flex: 1;
-        }
-
-        .color-picker-input {
-            width: 50px;
-            height: 40px;
-            padding: 2px;
-            cursor: pointer;
-        }
-
-        .color-palette {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-
-        .color-swatch {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        .color-swatch-box {
-            width: 60px;
-            height: 60px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--bg-border);
-            transition: transform var(--transition);
-        }
-
-        .color-swatch-box:hover {
-            transform: scale(1.05);
-        }
-
-        .color-swatch-label {
-            font-family: var(--font-mono);
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .color-contrast {
-            margin-top: 24px;
-            padding-top: 16px;
-            border-top: 1px solid var(--bg-border);
-        }
-
-        .color-contrast-item {
-            margin-bottom: 16px;
-        }
-
-        .color-contrast-ratio {
-            font-family: var(--font-mono);
-            font-size: 14px;
-            color: var(--accent-primary);
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .color-contrast-badge {
-            display: inline-flex;
-            gap: 4px;
-            font-size: 11px;
-            padding: 4px 8px;
-            border-radius: 4px;
-            margin-right: 4px;
-            margin-bottom: 4px;
-        }
-
-        .color-contrast-pass {
-            background: rgba(0, 255, 157, 0.2);
-            color: var(--accent-secondary);
-            border: 1px solid var(--accent-secondary);
-        }
-
-        .color-contrast-fail {
-            background: rgba(255, 68, 102, 0.2);
-            color: var(--accent-danger);
-            border: 1px solid var(--accent-danger);
-        }
-
-        /* ===== WORLD TIME TOOL ===== */
-        .worldtime-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .worldtime-card {
-            background: var(--bg-elevated);
-            border: 1px solid var(--bg-border);
-            border-radius: var(--radius-lg);
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
             transition: all var(--transition);
         }
 
-        .worldtime-card:hover {
+        .skill-badge:hover {
+            background: rgba(92, 122, 78, 0.1);
             border-color: var(--accent-primary);
-            box-shadow: 0 0 12px var(--accent-glow);
-        }
-
-        .worldtime-city {
-            font-weight: 600;
-            color: var(--text-primary);
-            font-size: 14px;
-        }
-
-        .worldtime-timezone {
-            font-size: 11px;
-            color: var(--text-secondary);
-            font-family: var(--font-mono);
-        }
-
-        .worldtime-time {
-            font-family: var(--font-mono);
-            font-size: 18px;
             color: var(--accent-primary);
-            font-weight: 600;
-            margin-top: 4px;
         }
 
-        .worldtime-date {
-            font-family: var(--font-mono);
-            font-size: 12px;
-            color: var(--text-secondary);
+        /* ===== PROJECTS SECTION ===== */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
         }
 
-        .worldtime-offset {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-
-        .worldtime-converter {
+        .project-card {
             background: var(--bg-surface);
             border: 1px solid var(--bg-border);
             border-radius: var(--radius-lg);
             padding: 24px;
-        }
-
-        .worldtime-converter-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .worldtime-converter-result {
-            background: var(--bg-elevated);
-            border: 1px solid var(--bg-border);
-            border-radius: var(--radius-md);
-            padding: 12px;
-            margin-top: 12px;
-            font-family: var(--font-mono);
-        }
-
-        .worldtime-converter-result-label {
-            font-size: 11px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .worldtime-converter-result-value {
-            font-size: 16px;
-            color: var(--accent-primary);
-            font-weight: 600;
-            margin-top: 6px;
-        }
-
-        /* ===== UNIVERSAL CLOCK TOOL ===== */
-        .uniclock-main {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .uniclock-utc {
-            position: relative;
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            background: var(--bg-elevated);
-            border: 3px solid var(--accent-primary);
-            box-shadow: 0 0 40px var(--accent-glow), inset 0 0 30px rgba(0, 212, 255, 0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .uniclock-center-dot {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background: var(--accent-primary);
-            border-radius: 50%;
-            z-index: 10;
-        }
-
-        .uniclock-hand {
-            position: absolute;
-            background: var(--accent-primary);
-            transform-origin: bottom center;
-            left: 50%;
-        }
-
-        .uniclock-hand-hour {
-            width: 6px;
-            height: 80px;
-            margin-left: -3px;
-            margin-bottom: 0;
-        }
-
-        .uniclock-hand-minute {
-            width: 4px;
-            height: 110px;
-            margin-left: -2px;
-            margin-bottom: 0;
-            opacity: 0.8;
-        }
-
-        .uniclock-hand-second {
-            width: 2px;
-            height: 120px;
-            margin-left: -1px;
-            margin-bottom: 0;
-            background: #ff6b6b;
-            opacity: 0.9;
-        }
-
-        .uniclock-labels {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        .uniclock-label {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        .uniclock-digital {
-            font-family: var(--font-mono);
-            font-size: 48px;
-            color: var(--accent-primary);
-            font-weight: 600;
-            text-align: center;
-            letter-spacing: 2px;
-        }
-
-        .uniclock-digital-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .uniclock-cities {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            width: 100%;
-        }
-
-        .uniclock-city-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--bg-border);
-            border-radius: var(--radius-lg);
-            padding: 16px;
-            text-align: center;
             transition: all var(--transition);
         }
 
-        .uniclock-city-card:hover {
+        .project-card:hover {
             border-color: var(--accent-primary);
-            box-shadow: 0 0 12px var(--accent-glow);
+            box-shadow: 0 8px 24px rgba(92, 122, 78, 0.1);
+            transform: translateY(-4px);
         }
 
-        .uniclock-city-name {
-            font-weight: 600;
+        .project-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .project-desc {
+            color: var(--text-secondary);
             font-size: 14px;
+            margin-bottom: 16px;
+            flex-grow: 1;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tag {
+            background: rgba(160, 113, 74, 0.1);
+            color: var(--accent-secondary);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .project-link {
+            color: var(--accent-primary);
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .coming-soon {
+            background: rgba(157, 144, 130, 0.05);
+            border-style: dashed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            min-height: 300px;
+            text-align: center;
+        }
+
+        /* ===== ARTICLES SECTION ===== */
+        .articles-list {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .article-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--bg-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            transition: all var(--transition);
+        }
+
+        .article-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 8px 24px rgba(92, 122, 78, 0.1);
+        }
+
+        .article-date {
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .article-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
             color: var(--text-primary);
             margin-bottom: 8px;
         }
 
-        .uniclock-city-time {
-            font-family: var(--font-mono);
-            font-size: 24px;
-            color: var(--accent-primary);
-            font-weight: 600;
-            margin-bottom: 4px;
+        .article-excerpt {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 12px;
         }
 
-        .uniclock-city-tz {
-            font-size: 11px;
+        .read-more {
+            color: var(--accent-primary);
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        /* ===== CONTACT SECTION ===== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .social-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--bg-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            text-align: center;
+            transition: all var(--transition);
+        }
+
+        .social-card:hover {
+            border-color: var(--accent-primary);
+            background: rgba(92, 122, 78, 0.05);
+            transform: translateY(-4px);
+        }
+
+        .social-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .social-label {
             color: var(--text-secondary);
-            font-family: var(--font-mono);
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .social-handle {
+            color: var(--accent-primary);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--bg-elevated);
+            border-top: 1px solid var(--bg-border);
+            padding: 40px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            nav ul {
+                gap: 20px;
+            }
+
+            nav a {
+                font-size: 12px;
+            }
+
+            section {
+                padding: 80px 24px;
+            }
+
+            #hero {
+                padding: 100px 24px 80px;
+            }
+
+            .about-grid,
+            .skills-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
         }
 
         /* ===== SCROLLBAR ===== */
         ::-webkit-scrollbar {
             width: 8px;
-            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
@@ -1108,2536 +526,204 @@
         ::-webkit-scrollbar-thumb:hover {
             background: var(--accent-primary);
         }
-
-        /* ===== POKEMON GAME ===== */
-        .pokemon-arena {
-            display: flex;
-            gap: 40px;
-            justify-content: center;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .pokemon-card {
-            background: var(--bg-surface);
-            border: 1px solid var(--bg-border);
-            border-radius: var(--radius-lg);
-            padding: 20px;
-            width: 220px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
-        }
-
-        .pokemon-card-title {
-            font-size: 12px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        .pokemon-sprite {
-            width: 120px;
-            height: 120px;
-            image-rendering: pixelated;
-            margin: 10px auto;
-            display: block;
-        }
-
-        .pokemon-name {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--accent-primary);
-            margin: 10px 0;
-            text-transform: capitalize;
-        }
-
-        .pokemon-level {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-        }
-
-        .hp-bar-container {
-            background: var(--bg-base);
-            border-radius: 4px;
-            height: 16px;
-            overflow: hidden;
-            margin: 10px 0;
-            border: 1px solid var(--bg-border);
-        }
-
-        .hp-bar {
-            background: linear-gradient(90deg, var(--accent-secondary) 0%, var(--accent-warning) 50%, var(--accent-danger) 100%);
-            height: 100%;
-            transition: width 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .hp-text {
-            font-size: 11px;
-            color: var(--text-secondary);
-            font-family: var(--font-mono);
-        }
-
-        .battle-log {
-            background: var(--bg-base);
-            border: 1px solid var(--bg-border);
-            color: var(--text-primary);
-            font-family: var(--font-mono);
-            font-size: 12px;
-            padding: 12px;
-            border-radius: var(--radius-md);
-            height: 150px;
-            resize: vertical;
-            margin: 12px 0;
-        }
-
-        .battle-log:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
-        }
-
-        .battle-actions {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .battle-actions button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        @media (max-width: 900px) {
-            .pokemon-arena {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .battle-actions {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .pokemon-card {
-                width: 100%;
-            }
-
-            .pokemon-sprite {
-                width: 80px;
-                height: 80px;
-            }
-
-            .battle-actions {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ===== GAMERTAG GENERATOR ===== */
-        .gamertag-controls {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .control-group label {
-            min-width: 80px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            font-size: 13px;
-        }
-
-        .control-group select,
-        .control-group input[type="range"] {
-            flex: 1;
-            padding: 8px 12px;
-            background: var(--bg-base);
-            border: 1px solid var(--bg-border);
-            color: var(--text-primary);
-            border-radius: var(--radius-md);
-            font-family: var(--font-sans);
-        }
-
-        .control-group input[type="range"] {
-            padding: 0;
-        }
-
-        .control-group input[type="range"]::-webkit-slider-thumb {
-            background: var(--accent-primary);
-            border-radius: 50%;
-            cursor: pointer;
-        }
-
-        #countDisplay {
-            min-width: 30px;
-            text-align: center;
-            color: var(--accent-primary);
-            font-weight: 600;
-        }
-
-        .gamertag-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin-top: 12px;
-        }
-
-        .gamertag-item {
-            background: var(--bg-base);
-            border: 1px solid var(--bg-border);
-            border-radius: var(--radius-md);
-            padding: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all var(--transition);
-        }
-
-        .gamertag-item:hover {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
-        }
-
-        .gamertag-text {
-            font-family: var(--font-mono);
-            font-size: 14px;
-            color: var(--accent-primary);
-            font-weight: 600;
-        }
-
-        .gamertag-copy-btn {
-            background: var(--accent-primary);
-            border: none;
-            color: var(--bg-base);
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
-            transition: all var(--transition);
-        }
-
-        .gamertag-copy-btn:hover {
-            opacity: 0.8;
-            transform: scale(1.05);
-        }
-
-        .gamertag-copy-btn.copied {
-            background: var(--accent-secondary);
-        }
-
-        /* ===== KOJI GOLF ===== */
-        .golf-container {
-            background: linear-gradient(135deg, #1a4d2e 0%, #2d5f3f 100%);
-            border: 2px solid var(--accent-primary);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-        }
-
-        #golfCanvas {
-            display: block;
-            cursor: crosshair;
-            background: linear-gradient(135deg, #1a4d2e 0%, #2d5f3f 100%);
-            width: 100%;
-            height: auto;
-        }
-
-        .golf-info {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .info-item {
-            background: var(--bg-surface);
-            border: 1px solid var(--bg-border);
-            border-radius: var(--radius-md);
-            padding: 12px;
-            text-align: center;
-        }
-
-        .info-label {
-            display: block;
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .info-value {
-            display: block;
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--accent-primary);
-            font-family: var(--font-mono);
-        }
-
-        .golf-controls {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        @media (max-width: 600px) {
-            .golf-controls {
-                grid-template-columns: 1fr;
-            }
-
-            .golf-info {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 900px) {
-            .json-container {
-                grid-template-columns: 1fr;
-            }
-
-            .timestamp-container {
-                grid-template-columns: 1fr;
-            }
-
-            .color-container {
-                grid-template-columns: 1fr;
-            }
-
-            .main-content {
-                padding: 24px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .sidebar {
-                width: var(--sidebar-width-collapsed);
-            }
-
-            .main-content {
-                padding: 16px;
-            }
-
-            .card {
-                padding: 16px;
-            }
-        }
     </style>
 </head>
 <body>
-    <div id="app">
-        <!-- SIDEBAR -->
-        <aside id="sidebar" class="sidebar">
-            <div class="sidebar-header">
-                <span class="logo-icon">></span>
-                <span class="logo-text">LAZ Tools</span>
-                <button id="collapseBtn" class="collapse-btn" title="Toggle sidebar">←</button>
-            </div>
+    <!-- HEADER & NAV -->
+    <header id="header">
+        <nav>
+            <div class="logo">Edward</div>
+            <ul>
+                <li><a href="#hero" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#projects" class="nav-link">Projects</a></li>
+                <li><a href="#articles" class="nav-link">Articles</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
 
-            <nav class="sidebar-nav">
-                <a class="nav-item active" data-tool="devices" title="Device Records">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M2 17h20"/><path d="M6 21h12"/>
-                        </svg>
-                    </span>
-                    <span class="nav-label">Device Records</span>
-                </a>
-                <a class="nav-item" data-tool="json" title="JSON Formatter">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/>
-                        </svg>
-                    </span>
-                    <span class="nav-label">JSON Formatter</span>
-                </a>
-                <a class="nav-item" data-tool="base64" title="Base64">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 5v14m-7-7h14"/><rect x="2" y="2" width="20" height="20" rx="2"/>
-                        </svg>
-                    </span>
-                    <span class="nav-label">Base64</span>
-                </a>
-                <a class="nav-item" data-tool="text" title="Text Tools">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 7h16M4 12h16M4 17h16"/>
-                        </svg>
-                    </span>
-                    <span class="nav-label">Text Tools</span>
-                </a>
-                <a class="nav-item" data-tool="timestamp" title="Timestamp">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-                        </svg>
-                    </span>
-                    <span class="nav-label">Timestamp</span>
-                </a>
-                <a class="nav-item" data-tool="password" title="Password Gen">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                        </svg>
-                    </span>
-                    <span class="nav-label">Password Gen</span>
-                </a>
-                <a class="nav-item" data-tool="color" title="Color Tools">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 0 0 20m0 0a10 10 0 0 0 0-20"/>
-                        </svg>
-                    </span>
-                    <span class="nav-label">Color Tools</span>
-                </a>
-                <a class="nav-item" data-tool="worldtime" title="World Time">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/>
-                        </svg>
-                    </span>
-                    <span class="nav-label">World Time</span>
-                </a>
-                <a class="nav-item" data-tool="uniclock" title="Universal Clock">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 16 14"/><circle cx="12" cy="12" r="2"/>
-                        </svg>
-                    </span>
-                    <span class="nav-label">Universal Clock</span>
-                </a>
-                <a class="nav-item" data-tool="pokemon" title="Pokemon">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="9"/><path d="M12 2v8m-7-7l6 6m8-6l-6 6m-2 7v8m-5-3h10"/><circle cx="12" cy="12" r="1.5"/>
-                        </svg>
-                    </span>
-                    <span class="nav-label">Pokemon</span>
-                </a>
-                <a class="nav-item" data-tool="gamertag" title="Gamertag Generator">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2z"/><text x="12" y="15" text-anchor="middle" font-size="8" fill="currentColor">GT</text>
-                        </svg>
-                    </span>
-                    <span class="nav-label">Gamertag Gen</span>
-                </a>
-                <a class="nav-item" data-tool="koji" title="Koji Golf">
-                    <span class="nav-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="2"/><path d="M8 12c0-2.21 1.79-4 4-4s4 1.79 4 4"/><path d="M12 20v-6m0 0c-1.5 0-3 1-3 3m6-3c1.5 0 3 1 3 3"/>
-                        </svg>
-                    </span>
-                    <span class="nav-label">Koji Golf</span>
-                </a>
-            </nav>
-
-            <div class="sidebar-footer">v2.0.0</div>
-        </aside>
-
-        <!-- MAIN CONTENT -->
-        <main id="mainContent" class="main-content">
-            <!-- DEVICE RECORDS PANEL -->
-            <div id="panel-devices" class="tool-panel active">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Device Records</h1>
-                    <p class="panel-subtitle">Log and export device serial numbers</p>
+    <!-- MAIN CONTENT -->
+    <main>
+        <!-- HERO SECTION -->
+        <section id="hero">
+            <div class="hero-content">
+                <h1>Desktop Engineer<br>Shifting to AI</h1>
+                <p class="hero-subtitle">Building intelligent systems, exploring machine learning, and sharing my journey from traditional engineering to AI development.</p>
+                <div class="hero-cta">
+                    <a href="#projects" class="btn btn-primary">View My Work</a>
+                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
                 </div>
-                <div class="panel-body">
-                    <div class="card">
-                        <div class="devices-form-group">
-                            <div class="devices-input-field">
-                                <label for="serial">Serial Number</label>
-                                <input type="text" id="serial" placeholder="e.g., ABC123456">
-                            </div>
-                            <div class="devices-input-field">
-                                <label for="model">Model</label>
-                                <input type="text" id="model" placeholder="e.g., XR-500">
-                            </div>
-                            <button class="btn btn-primary" onclick="DeviceRecords.submitRecord()">Submit</button>
-                        </div>
-                    </div>
+            </div>
+        </section>
 
+        <!-- ABOUT SECTION -->
+        <section id="about">
+            <h2>About Me</h2>
+            <div class="about-grid">
+                <div class="about-content">
+                    <h3>Background</h3>
+                    <p>I started my career as a desktop engineer, building robust systems and solving complex infrastructure challenges. After several years in the field, I discovered my passion for AI and machine learning.</p>
+                    <p>Now I'm actively transitioning into AI development, learning modern ML frameworks, neural networks, and building projects that combine my engineering background with cutting-edge AI technologies.</p>
+                    <span class="about-badge">🚀 Currently Learning: PyTorch, LLMs, and GenAI</span>
+                </div>
+                <div class="about-image">
+                    Profile Photo (Coming Soon)
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS SECTION -->
+        <section id="skills">
+            <h2>Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-group">
+                    <h3>Engineering</h3>
+                    <div class="skill-list">
+                        <span class="skill-badge">Desktop Systems</span>
+                        <span class="skill-badge">Infrastructure</span>
+                        <span class="skill-badge">C++</span>
+                        <span class="skill-badge">Python</span>
+                        <span class="skill-badge">Debugging</span>
+                        <span class="skill-badge">Performance Tuning</span>
+                    </div>
+                </div>
+                <div class="skill-group">
+                    <h3>AI & Machine Learning</h3>
+                    <div class="skill-list">
+                        <span class="skill-badge">Python (NumPy, Pandas)</span>
+                        <span class="skill-badge">PyTorch</span>
+                        <span class="skill-badge">Neural Networks</span>
+                        <span class="skill-badge">LLMs</span>
+                        <span class="skill-badge">Generative AI</span>
+                        <span class="skill-badge">Learning & Growing</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects">
+            <h2>Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-title">Portfolio Website</div>
+                    <p class="project-desc">This website! A modern, earthy-toned portfolio built with vanilla HTML/CSS to showcase my work and transition into AI.</p>
+                    <div class="project-tags">
+                        <span class="tag">HTML</span>
+                        <span class="tag">CSS</span>
+                        <span class="tag">Web Design</span>
+                    </div>
+                    <a href="#" class="project-link">View on GitHub →</a>
+                </div>
+
+                <div class="project-card coming-soon">
                     <div>
-                        <div class="devices-table-header">
-                            <div>
-                                <h2>Records</h2>
-                                <span class="devices-record-count" id="recordCount">0 entries</span>
-                            </div>
-                            <button class="btn btn-success" onclick="DeviceRecords.exportToText()">📥 Export to Text</button>
-                        </div>
-
-                        <table class="devices-table">
-                            <thead>
-                                <tr>
-                                    <th style="width: 50px;">#</th>
-                                    <th>Serial Number</th>
-                                    <th>Model</th>
-                                    <th>Date Submitted</th>
-                                    <th class="devices-action-cell">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="recordsBody"></tbody>
-                        </table>
-
-                        <div class="devices-empty-state" id="emptyState">
-                            <p>No records yet. Submit your first entry above!</p>
-                        </div>
+                        <p style="margin: 0; color: var(--text-muted);">More projects coming soon...</p>
+                        <p style="margin: 8px 0 0; font-size: 12px; color: var(--text-muted);">Currently building AI/ML projects</p>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- JSON FORMATTER PANEL -->
-            <div id="panel-json" class="tool-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> JSON Formatter</h1>
-                    <p class="panel-subtitle">Prettify, minify, and validate JSON</p>
+        <!-- ARTICLES SECTION -->
+        <section id="articles">
+            <h2>Articles & Insights</h2>
+            <div class="articles-list">
+                <div class="article-card">
+                    <div class="article-date">March 2026</div>
+                    <div class="article-title">My Transition from Desktop Engineering to AI</div>
+                    <p class="article-excerpt">How I'm leveraging my 10+ years of systems engineering experience to break into machine learning and AI development. A guide to transitioning careers in tech.</p>
+                    <a href="#" class="read-more">Read More →</a>
                 </div>
-                <div class="panel-body">
-                    <div class="card">
-                        <div class="input-group">
-                            <label>Indentation</label>
-                            <select id="jsonIndent" onchange="JsonFormatter.updateIndent()">
-                                <option value="2">2 Spaces</option>
-                                <option value="4" selected>4 Spaces</option>
-                                <option value="tab">Tab</option>
-                            </select>
-                        </div>
-                    </div>
 
-                    <div class="json-container">
-                        <div class="json-column">
-                            <label>Input</label>
-                            <textarea id="jsonInput" class="json-textarea" placeholder="Paste JSON here..."></textarea>
-                            <div class="json-stats" id="jsonInputStats"></div>
-                            <div class="json-controls">
-                                <button class="btn btn-primary btn-sm" onclick="JsonFormatter.prettify()">Prettify</button>
-                                <button class="btn btn-ghost btn-sm" onclick="JsonFormatter.minify()">Minify</button>
-                                <button class="btn btn-ghost btn-sm" onclick="JsonFormatter.clearInput()">Clear</button>
-                            </div>
-                            <div class="json-error" id="jsonError"></div>
-                        </div>
-
-                        <div class="json-column">
-                            <label>Output</label>
-                            <textarea id="jsonOutput" class="json-textarea" readonly placeholder="Formatted output will appear here..."></textarea>
-                            <div class="json-stats" id="jsonOutputStats"></div>
-                            <div class="json-controls">
-                                <button class="btn btn-ghost btn-sm" onclick="JsonFormatter.copyOutput()">Copy Output</button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="article-card">
+                    <div class="article-date">Coming Soon</div>
+                    <div class="article-title">Getting Started with PyTorch: A Desktop Engineer's Guide</div>
+                    <p class="article-excerpt">Deep dive into PyTorch for someone coming from a traditional engineering background. Learn neural networks with a systems-level perspective.</p>
+                    <a href="#" class="read-more">Coming Soon →</a>
                 </div>
             </div>
+        </section>
 
-            <!-- BASE64 PANEL -->
-            <div id="panel-base64" class="tool-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Base64 Converter</h1>
-                    <p class="panel-subtitle">Encode and decode base64 strings</p>
+        <!-- CONTACT SECTION -->
+        <section id="contact">
+            <h2>Let's Connect</h2>
+            <div class="contact-grid">
+                <div class="social-card">
+                    <div class="social-icon">💻</div>
+                    <div class="social-label">GitHub</div>
+                    <a href="#" class="social-handle">@username</a>
                 </div>
-                <div class="panel-body">
-                    <div class="card">
-                        <div class="card-title">Encode</div>
-                        <div class="input-group">
-                            <label>Plain Text</label>
-                            <textarea id="base64Input" placeholder="Enter text to encode..." style="min-height: 120px;"></textarea>
-                        </div>
-                        <button class="btn btn-primary btn-sm" onclick="Base64Tool.encode()">Encode</button>
-                        <div class="input-group" style="margin-top: 16px;">
-                            <label>Base64 Output</label>
-                            <textarea id="base64Output" readonly style="min-height: 120px;"></textarea>
-                        </div>
-                        <button class="btn btn-ghost btn-sm" onclick="Base64Tool.copyOutput()">Copy</button>
-                    </div>
 
-                    <div class="card">
-                        <div class="card-title">Decode</div>
-                        <div class="input-group">
-                            <label>Base64 Input</label>
-                            <textarea id="base64DecodeInput" placeholder="Enter base64 to decode..." style="min-height: 120px;"></textarea>
-                        </div>
-                        <button class="btn btn-primary btn-sm" onclick="Base64Tool.decode()">Decode</button>
-                        <div class="input-group" style="margin-top: 16px;">
-                            <label>Plain Text Output</label>
-                            <textarea id="base64DecodeOutput" readonly style="min-height: 120px;"></textarea>
-                        </div>
-                        <button class="btn btn-ghost btn-sm" onclick="Base64Tool.copyDecoded()">Copy</button>
-                        <div class="json-error" id="base64Error"></div>
-                    </div>
+                <div class="social-card">
+                    <div class="social-icon">💼</div>
+                    <div class="social-label">LinkedIn</div>
+                    <a href="#" class="social-handle">edward-name</a>
+                </div>
+
+                <div class="social-card">
+                    <div class="social-icon">𝕏</div>
+                    <div class="social-label">Twitter</div>
+                    <a href="#" class="social-handle">@handle</a>
+                </div>
+
+                <div class="social-card">
+                    <div class="social-icon">✉️</div>
+                    <div class="social-label">Email</div>
+                    <a href="mailto:your@email.com" class="social-handle">your@email.com</a>
                 </div>
             </div>
+        </section>
+    </main>
 
-            <!-- TEXT TOOLS PANEL -->
-            <div id="panel-text" class="tool-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Text Tools</h1>
-                    <p class="panel-subtitle">Analyze and transform text</p>
-                </div>
-                <div class="panel-body">
-                    <div class="card">
-                        <label>Text Input</label>
-                        <textarea id="textInput" class="text-textarea" placeholder="Enter text here..." oninput="TextTools.updateStats()"></textarea>
-
-                        <div class="text-stats" id="textStats"></div>
-
-                        <div class="card-title" style="margin-top: 24px;">Case Conversions</div>
-                        <div class="text-conversions">
-                            <button class="btn btn-ghost btn-sm" onclick="TextTools.convert('upper')">UPPERCASE</button>
-                            <button class="btn btn-ghost btn-sm" onclick="TextTools.convert('lower')">lowercase</button>
-                            <button class="btn btn-ghost btn-sm" onclick="TextTools.convert('title')">Title Case</button>
-                            <button class="btn btn-ghost btn-sm" onclick="TextTools.convert('sentence')">Sentence case</button>
-                            <button class="btn btn-ghost btn-sm" onclick="TextTools.convert('camel')">camelCase</button>
-                            <button class="btn btn-ghost btn-sm" onclick="TextTools.convert('snake')">snake_case</button>
-                            <button class="btn btn-ghost btn-sm" onclick="TextTools.convert('kebab')">kebab-case</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TIMESTAMP PANEL -->
-            <div id="panel-timestamp" class="tool-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Timestamp Converter</h1>
-                    <p class="panel-subtitle">Convert between Unix timestamps and human-readable dates</p>
-                </div>
-                <div class="panel-body">
-                    <div class="timestamp-clock">
-                        <div class="timestamp-clock-value" id="currentUnix">0</div>
-                        <div class="timestamp-clock-label">Current Unix Time</div>
-                    </div>
-
-                    <div class="timestamp-container">
-                        <div class="card">
-                            <div class="card-title">Unix to Human</div>
-                            <div class="input-group">
-                                <label>Unix Timestamp</label>
-                                <input type="number" id="unixInput" placeholder="e.g., 1234567890">
-                            </div>
-                            <div class="input-row">
-                                <button class="btn btn-primary btn-sm" onclick="TimestampTool.toHuman()">Convert</button>
-                                <button class="btn btn-ghost btn-sm" onclick="TimestampTool.useNowUnix()">Use Now</button>
-                            </div>
-                            <div class="timestamp-output" id="unixOutput"></div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-title">Human to Unix</div>
-                            <div class="input-group">
-                                <label>Date & Time</label>
-                                <input type="datetime-local" id="humanInput">
-                            </div>
-                            <div class="input-row">
-                                <button class="btn btn-primary btn-sm" onclick="TimestampTool.toUnix()">Convert</button>
-                                <button class="btn btn-ghost btn-sm" onclick="TimestampTool.useNowHuman()">Use Now</button>
-                            </div>
-                            <div class="timestamp-output" id="humanOutput"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PASSWORD GENERATOR PANEL -->
-            <div id="panel-password" class="tool-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Password Generator</h1>
-                    <p class="panel-subtitle">Generate secure random passwords</p>
-                </div>
-                <div class="panel-body">
-                    <div class="card">
-                        <div class="password-options">
-                            <div class="password-option-row">
-                                <label for="pwLength">Length:</label>
-                                <input type="range" id="pwLength" min="4" max="128" value="16" style="flex: 1; max-width: 200px;" oninput="PasswordGen.updateLength()">
-                                <span class="password-length-display" id="pwLengthDisplay">16</span>
-                            </div>
-
-                            <div class="password-option-row">
-                                <label class="password-checkbox">
-                                    <input type="checkbox" id="pwUppercase" checked onchange="PasswordGen.generate()">
-                                    Uppercase (A-Z)
-                                </label>
-                            </div>
-
-                            <div class="password-option-row">
-                                <label class="password-checkbox">
-                                    <input type="checkbox" id="pwLowercase" checked onchange="PasswordGen.generate()">
-                                    Lowercase (a-z)
-                                </label>
-                            </div>
-
-                            <div class="password-option-row">
-                                <label class="password-checkbox">
-                                    <input type="checkbox" id="pwNumbers" checked onchange="PasswordGen.generate()">
-                                    Numbers (0-9)
-                                </label>
-                            </div>
-
-                            <div class="password-option-row">
-                                <label class="password-checkbox">
-                                    <input type="checkbox" id="pwSymbols" checked onchange="PasswordGen.generate()">
-                                    Symbols (!@#$%^&*)
-                                </label>
-                            </div>
-
-                            <div class="password-option-row">
-                                <label class="password-checkbox">
-                                    <input type="checkbox" id="pwExcludeAmbiguous" onchange="PasswordGen.generate()">
-                                    Exclude ambiguous chars
-                                </label>
-                            </div>
-
-                            <div class="password-option-row">
-                                <label for="pwQuantity">Quantity:</label>
-                                <input type="number" id="pwQuantity" min="1" max="10" value="1" style="width: 80px;" onchange="PasswordGen.generate()">
-                            </div>
-                        </div>
-
-                        <div class="input-row">
-                            <button class="btn btn-primary" onclick="PasswordGen.generate()">Generate</button>
-                            <button class="btn btn-ghost btn-sm" onclick="PasswordGen.copyAll()">Copy All</button>
-                        </div>
-
-                        <label style="margin-top: 20px;">Generated Passwords</label>
-                        <textarea id="pwOutput" class="password-output" readonly></textarea>
-
-                        <div id="pwStrengthContainer" style="display: none;">
-                            <div class="password-strength-bar" id="pwStrengthBar">
-                                <div class="password-strength-segment"></div>
-                                <div class="password-strength-segment"></div>
-                                <div class="password-strength-segment"></div>
-                                <div class="password-strength-segment"></div>
-                            </div>
-                            <div class="password-strength-label">Strength: <span id="pwStrengthLabel">-</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- COLOR TOOLS PANEL -->
-            <div id="panel-color" class="tool-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Color Tools</h1>
-                    <p class="panel-subtitle">Convert and analyze colors</p>
-                </div>
-                <div class="panel-body">
-                    <div class="color-container">
-                        <div class="card">
-                            <div class="card-title">Converter</div>
-
-                            <div class="color-input-row">
-                                <div class="color-input-group">
-                                    <label for="colorHex">Hex</label>
-                                    <input type="text" id="colorHex" value="#00d4ff" placeholder="#000000" oninput="ColorTools.hexToOther()">
-                                </div>
-                                <input type="color" id="colorPickerNative" value="#00d4ff" class="color-picker-input" oninput="ColorTools.pickerToHex()">
-                            </div>
-
-                            <div class="input-row">
-                                <div class="color-input-group">
-                                    <label for="colorR">Red</label>
-                                    <input type="number" id="colorR" min="0" max="255" value="0" oninput="ColorTools.rgbToOther()">
-                                </div>
-                                <div class="color-input-group">
-                                    <label for="colorG">Green</label>
-                                    <input type="number" id="colorG" min="0" max="255" value="212" oninput="ColorTools.rgbToOther()">
-                                </div>
-                                <div class="color-input-group">
-                                    <label for="colorB">Blue</label>
-                                    <input type="number" id="colorB" min="0" max="255" value="255" oninput="ColorTools.rgbToOther()">
-                                </div>
-                            </div>
-
-                            <div class="input-row">
-                                <div class="color-input-group">
-                                    <label for="colorHsl">HSL</label>
-                                    <input type="text" id="colorHsl" readonly>
-                                </div>
-                            </div>
-
-                            <div class="color-preview" id="colorPreview" style="background-color: #00d4ff; color: #000;">#00d4ff</div>
-
-                            <div class="input-row">
-                                <button class="btn btn-ghost btn-sm" onclick="ColorTools.copyHex()">Copy Hex</button>
-                                <button class="btn btn-ghost btn-sm" onclick="ColorTools.copyRgb()">Copy RGB</button>
-                                <button class="btn btn-ghost btn-sm" onclick="ColorTools.copyHsl()">Copy HSL</button>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-title">Palette</div>
-                            <div class="color-palette" id="colorPalette"></div>
-
-                            <div class="color-contrast">
-                                <div class="card-title">WCAG Contrast</div>
-                                <div class="color-contrast-item">
-                                    <div class="input-row">
-                                        <div class="color-input-group">
-                                            <label>Foreground</label>
-                                            <input type="text" id="contrastFg" value="#00d4ff" placeholder="#000000" oninput="ColorTools.updateContrast()">
-                                        </div>
-                                        <div class="color-input-group">
-                                            <label>Background</label>
-                                            <input type="text" id="contrastBg" value="#0a0e14" placeholder="#ffffff" oninput="ColorTools.updateContrast()">
-                                        </div>
-                                    </div>
-                                    <div style="margin-top: 12px;">
-                                        <div class="color-contrast-ratio">Ratio: <span id="contrastRatioValue">12.5</span></div>
-                                        <div id="contrastBadges"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- WORLD TIME PANEL -->
-            <div id="panel-worldtime" class="tool-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> World Time</h1>
-                    <p class="panel-subtitle">See current time across timezones and convert between them</p>
-                </div>
-                <div class="panel-body">
-                    <div class="card">
-                        <div class="card-title">Current Time by City</div>
-                        <div class="worldtime-grid" id="worldtimeGrid"></div>
-                    </div>
-
-                    <div class="worldtime-converter">
-                        <div class="card-title" style="margin-bottom: 20px;">Convert Time Between Timezones</div>
-
-                        <div class="worldtime-converter-row">
-                            <div class="input-group">
-                                <label for="wtSourceTz">From Timezone</label>
-                                <select id="wtSourceTz" onchange="WorldTime.updateConversion()">
-                                    <option value="UTC">UTC</option>
-                                    <option value="America/New_York">America/New_York (EST)</option>
-                                    <option value="America/Chicago">America/Chicago (CST)</option>
-                                    <option value="America/Denver">America/Denver (MST)</option>
-                                    <option value="America/Los_Angeles">America/Los_Angeles (PST)</option>
-                                    <option value="Europe/London">Europe/London (GMT)</option>
-                                    <option value="Europe/Paris">Europe/Paris (CET)</option>
-                                    <option value="Europe/Berlin">Europe/Berlin (CET)</option>
-                                    <option value="Asia/Tokyo">Asia/Tokyo (JST)</option>
-                                    <option value="Asia/Shanghai">Asia/Shanghai (CST)</option>
-                                    <option value="Asia/Hong_Kong">Asia/Hong_Kong (HKT)</option>
-                                    <option value="Asia/Singapore">Asia/Singapore (SGT)</option>
-                                    <option value="Australia/Sydney">Australia/Sydney (AEDT)</option>
-                                    <option value="Pacific/Auckland">Pacific/Auckland (NZDT)</option>
-                                    <option value="Asia/Dubai">Asia/Dubai (GST)</option>
-                                    <option value="Asia/Kolkata">Asia/Kolkata (IST)</option>
-                                </select>
-                            </div>
-                            <div class="input-group">
-                                <label for="wtTargetTz">To Timezone</label>
-                                <select id="wtTargetTz" onchange="WorldTime.updateConversion()">
-                                    <option value="UTC">UTC</option>
-                                    <option value="America/New_York" selected>America/New_York (EST)</option>
-                                    <option value="America/Chicago">America/Chicago (CST)</option>
-                                    <option value="America/Denver">America/Denver (MST)</option>
-                                    <option value="America/Los_Angeles">America/Los_Angeles (PST)</option>
-                                    <option value="Europe/London">Europe/London (GMT)</option>
-                                    <option value="Europe/Paris">Europe/Paris (CET)</option>
-                                    <option value="Europe/Berlin">Europe/Berlin (CET)</option>
-                                    <option value="Asia/Tokyo">Asia/Tokyo (JST)</option>
-                                    <option value="Asia/Shanghai">Asia/Shanghai (CST)</option>
-                                    <option value="Asia/Hong_Kong">Asia/Hong_Kong (HKT)</option>
-                                    <option value="Asia/Singapore">Asia/Singapore (SGT)</option>
-                                    <option value="Australia/Sydney">Australia/Sydney (AEDT)</option>
-                                    <option value="Pacific/Auckland">Pacific/Auckland (NZDT)</option>
-                                    <option value="Asia/Dubai">Asia/Dubai (GST)</option>
-                                    <option value="Asia/Kolkata">Asia/Kolkata (IST)</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="worldtime-converter-row">
-                            <div class="input-group">
-                                <label for="wtSourceTime">Time</label>
-                                <input type="datetime-local" id="wtSourceTime" oninput="WorldTime.updateConversion()">
-                            </div>
-                            <div>
-                                <button class="btn btn-primary btn-sm" style="margin-top: 28px; width: 100%;" onclick="WorldTime.useNowForConversion()">Use Now</button>
-                            </div>
-                        </div>
-
-                        <div id="wtConversionResult"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- UNIVERSAL CLOCK PANEL -->
-            <div id="panel-uniclock" class="tool-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Universal Clock</h1>
-                    <p class="panel-subtitle">Live analog clock and city time display</p>
-                </div>
-                <div class="panel-body">
-                    <div class="uniclock-main">
-                        <div style="text-align: center;">
-                            <div class="uniclock-utc">
-                                <div class="uniclock-labels">
-                                    <div class="uniclock-label" style="top: 10px;">12</div>
-                                    <div class="uniclock-label" style="right: 10px; top: 50%; transform: translateY(-50%);">3</div>
-                                    <div class="uniclock-label" style="bottom: 10px;">6</div>
-                                    <div class="uniclock-label" style="left: 10px; top: 50%; transform: translateY(-50%);">9</div>
-                                </div>
-                                <div class="uniclock-hand uniclock-hand-hour" id="uniclockHour"></div>
-                                <div class="uniclock-hand uniclock-hand-minute" id="uniclockMinute"></div>
-                                <div class="uniclock-hand uniclock-hand-second" id="uniclockSecond"></div>
-                                <div class="uniclock-center-dot"></div>
-                            </div>
-                            <div class="uniclock-digital" id="uniclockDigital">00:00:00</div>
-                            <div class="uniclock-digital-label">UTC Time</div>
-                        </div>
-                    </div>
-
-                    <div class="card" style="margin-top: 40px;">
-                        <div class="card-title">Major Cities</div>
-                        <div class="uniclock-cities" id="uniclockCities"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- POKEMON PANEL -->
-            <div id="panel-pokemon" class="tool-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Pokemon Battle</h1>
-                    <p class="panel-subtitle">Catch 'em all in turn-based battles</p>
-                </div>
-                <div class="panel-body">
-                    <div class="pokemon-arena" id="pokemonArena" style="display: none;">
-                        <div class="pokemon-card">
-                            <div class="pokemon-card-title">Your Pokemon</div>
-                            <img id="playerSprite" class="pokemon-sprite" src="" alt="Player Pokemon">
-                            <div class="pokemon-name" id="playerName">---</div>
-                            <div class="pokemon-level" id="playerLevel">Lv. --</div>
-                            <div class="hp-bar-container">
-                                <div class="hp-bar" id="playerHpBar" style="width: 100%;"></div>
-                            </div>
-                            <div class="hp-text" id="playerHpText">HP: 100/100</div>
-                        </div>
-
-                        <div class="pokemon-card">
-                            <div class="pokemon-card-title">Enemy Pokemon</div>
-                            <img id="enemySprite" class="pokemon-sprite" src="" alt="Enemy Pokemon">
-                            <div class="pokemon-name" id="enemyName">---</div>
-                            <div class="pokemon-level" id="enemyLevel">Lv. --</div>
-                            <div class="hp-bar-container">
-                                <div class="hp-bar" id="enemyHpBar" style="width: 100%;"></div>
-                            </div>
-                            <div class="hp-text" id="enemyHpText">HP: 100/100</div>
-                        </div>
-                    </div>
-
-                    <div class="card" style="margin-top: 20px;">
-                        <div class="card-title">Battle Log</div>
-                        <textarea id="battleLog" class="battle-log" readonly>Welcome to Pokemon Battle! Click 'New Battle' to start.</textarea>
-                    </div>
-
-                    <div class="battle-actions">
-                        <button id="newBattleBtn" class="btn btn-primary">New Battle</button>
-                        <button id="attackBtn" class="btn btn-success" disabled>Attack</button>
-                        <button id="catchBtn" class="btn btn-warning" disabled>Catch</button>
-                        <button id="runBtn" class="btn btn-danger" disabled>Run</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- KOJI GOLF PANEL -->
-            <div id="panel-koji" class="tool-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Koji Golf</h1>
-                    <p class="panel-subtitle">Mini golf game - get the ball in the hole!</p>
-                </div>
-                <div class="panel-body">
-                    <div class="golf-container">
-                        <canvas id="golfCanvas" width="600" height="400"></canvas>
-                    </div>
-                    <div class="golf-info">
-                        <div class="info-item">
-                            <span class="info-label">Hole:</span>
-                            <span class="info-value" id="holeNumber">1/3</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Strokes:</span>
-                            <span class="info-value" id="strokeCount">0</span>
-                        </div>
-                        <div class="info-item">
-                            <span class="info-label">Power:</span>
-                            <span class="info-value" id="powerDisplay">0%</span>
-                        </div>
-                    </div>
-                    <div class="golf-controls">
-                        <button id="powerUpBtn" class="btn btn-primary">Aim & Power (Click Canvas)</button>
-                        <button id="resetHoleBtn" class="btn btn-warning">Reset Hole</button>
-                        <button id="newGameBtn" class="btn btn-success">New Game</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- GAMERTAG GENERATOR PANEL -->
-            <div id="panel-gamertag" class="tool-panel">
-                <div class="panel-header">
-                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Gamertag Generator</h1>
-                    <p class="panel-subtitle">Generate cool usernames and gamertags</p>
-                </div>
-                <div class="panel-body">
-                    <div class="card">
-                        <div class="card-title">Generate Gamertags</div>
-                        <div class="gamertag-controls">
-                            <div class="control-group">
-                                <label for="gamertagStyle">Style:</label>
-                                <select id="gamertagStyle">
-                                    <option value="fantasy">Fantasy</option>
-                                    <option value="tech">Tech</option>
-                                    <option value="cool">Cool</option>
-                                    <option value="animal">Animal</option>
-                                </select>
-                            </div>
-                            <div class="control-group">
-                                <label for="gamertagCount">Quantity:</label>
-                                <input type="range" id="gamertagCount" min="1" max="10" value="5">
-                                <span id="countDisplay">5</span>
-                            </div>
-                            <button id="generateBtn" class="btn btn-primary">Generate</button>
-                        </div>
-                    </div>
-
-                    <div class="card" style="margin-top: 20px;">
-                        <div class="card-title">Your Gamertags</div>
-                        <div id="gamertagList" class="gamertag-list"></div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- TOAST NOTIFICATION -->
-    <div id="toast"></div>
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Edward. All rights reserved. | Crafted with care.</p>
+    </footer>
 
     <script>
-        // ===== UI MODULE =====
-        const UI = {
-            toastTimer: null,
+        // ===== SMOOTH NAV ACTIVE STATE =====
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
 
-            showToast(message, type = 'info') {
-                const toast = document.getElementById('toast');
-                toast.textContent = message;
-                toast.className = type;
-                clearTimeout(UI.toastTimer);
-                setTimeout(() => toast.classList.add('show'), 10);
-                UI.toastTimer = setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 3000);
-            },
+        window.addEventListener('scroll', () => {
+            let current = 'hero';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
 
-            toggleSidebar() {
-                const sidebar = document.getElementById('sidebar');
-                const isCollapsed = sidebar.classList.toggle('collapsed');
-                localStorage.setItem('sidebarCollapsed', isCollapsed);
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+
+            // Header scroll effect
+            const header = document.getElementById('header');
+            if (window.pageYOffset > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
             }
-        };
+        });
 
-        // ===== APP MODULE =====
-        const App = {
-            currentTool: 'devices',
-
-            init() {
-                // Restore sidebar state
-                const collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
-                if (collapsed) {
-                    document.getElementById('sidebar').classList.add('collapsed');
+        // ===== SMOOTH SCROLL ENHANCEMENT =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && document.querySelector(href)) {
+                    e.preventDefault();
+                    document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
                 }
-
-                // Setup collapse button
-                document.getElementById('collapseBtn').addEventListener('click', UI.toggleSidebar);
-
-                // Setup nav items
-                document.querySelectorAll('.nav-item').forEach(el => {
-                    el.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        App.switchTool(el.dataset.tool);
-                    });
-                });
-
-                // Restore last active tool
-                const lastTool = localStorage.getItem('lastTool') || 'devices';
-                App.switchTool(lastTool);
-
-                // Initialize all tools
-                DeviceRecords.init();
-                JsonFormatter.init();
-                Base64Tool.init();
-                TextTools.init();
-                TimestampTool.init();
-                PasswordGen.init();
-                ColorTools.init();
-                WorldTime.init();
-                UniversalClock.init();
-                PokemonGame.init();
-                GamertagGenerator.init();
-                KojiGolf.init();
-            },
-
-            switchTool(toolId) {
-                // Hide all panels
-                document.querySelectorAll('.tool-panel').forEach(p => p.classList.remove('active'));
-                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-                // Show target panel
-                document.getElementById('panel-' + toolId).classList.add('active');
-                document.querySelector('[data-tool="' + toolId + '"]').classList.add('active');
-
-                App.currentTool = toolId;
-                localStorage.setItem('lastTool', toolId);
-            }
-        };
-
-        // ===== DEVICE RECORDS MODULE =====
-        const DeviceRecords = {
-            STORAGE_KEY: 'deviceRecords',
-
-            loadRecords() {
-                const stored = localStorage.getItem(this.STORAGE_KEY);
-                return stored ? JSON.parse(stored) : [];
-            },
-
-            saveRecords(records) {
-                localStorage.setItem(this.STORAGE_KEY, JSON.stringify(records));
-            },
-
-            formatDate(timestamp) {
-                const date = new Date(timestamp);
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                const hours = String(date.getHours()).padStart(2, '0');
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                const seconds = String(date.getSeconds()).padStart(2, '0');
-                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-            },
-
-            escapeHtml(text) {
-                const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
-                return text.replace(/[&<>"']/g, m => map[m]);
-            },
-
-            submitRecord() {
-                const serial = document.getElementById('serial').value.trim();
-                const model = document.getElementById('model').value.trim();
-
-                if (!serial || !model) {
-                    UI.showToast('Please enter both Serial Number and Model', 'error');
-                    return;
-                }
-
-                const records = this.loadRecords();
-                const newId = records.length > 0 ? Math.max(...records.map(r => r.id)) + 1 : 1;
-                const record = {
-                    id: newId,
-                    serial: serial,
-                    model: model,
-                    submitted: Date.now()
-                };
-
-                records.push(record);
-                this.saveRecords(records);
-
-                document.getElementById('serial').value = '';
-                document.getElementById('model').value = '';
-                UI.showToast('Record submitted successfully', 'success');
-
-                this.renderTable();
-                document.getElementById('serial').focus();
-            },
-
-            deleteRecord(id) {
-                if (!confirm('Are you sure you want to delete this record?')) {
-                    return;
-                }
-
-                const records = this.loadRecords();
-                const filtered = records.filter(r => r.id !== id);
-                this.saveRecords(filtered);
-                this.renderTable();
-            },
-
-            renderTable() {
-                const records = this.loadRecords();
-                const tbody = document.getElementById('recordsBody');
-                const emptyState = document.getElementById('emptyState');
-                const recordCount = document.getElementById('recordCount');
-
-                recordCount.textContent = `${records.length} ${records.length === 1 ? 'entry' : 'entries'}`;
-                tbody.innerHTML = '';
-
-                if (records.length === 0) {
-                    emptyState.style.display = 'block';
-                    return;
-                }
-
-                emptyState.style.display = 'none';
-                records.reverse().forEach((record, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${records.length - index}</td>
-                        <td>${this.escapeHtml(record.serial)}</td>
-                        <td>${this.escapeHtml(record.model)}</td>
-                        <td>${this.formatDate(record.submitted)}</td>
-                        <td class="devices-action-cell">
-                            <button class="btn btn-danger btn-icon btn-sm" onclick="DeviceRecords.deleteRecord(${record.id})">×</button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
-                });
-            },
-
-            exportToText() {
-                const records = this.loadRecords();
-
-                if (records.length === 0) {
-                    UI.showToast('No records to export', 'error');
-                    return;
-                }
-
-                const today = new Date();
-                const dateStr = today.getFullYear() +
-                    '-' + String(today.getMonth() + 1).padStart(2, '0') +
-                    '-' + String(today.getDate()).padStart(2, '0');
-                const filename = `device_records_${dateStr}.txt`;
-
-                let content = 'DEVICE RECORD ENTRY LOG\n';
-                content += '=======================\n\n';
-                content += `Generated: ${this.formatDate(Date.now())}\n\n`;
-                content += '#  | Serial Number       | Model              | Date Submitted\n';
-                content += '---|---------------------|--------------------|----------------------------------\n';
-
-                records.forEach((record, index) => {
-                    const num = String(index + 1).padStart(2, ' ');
-                    const serial = record.serial.padEnd(19, ' ');
-                    const model = record.model.padEnd(18, ' ');
-                    const date = this.formatDate(record.submitted);
-                    content += `${num} | ${serial} | ${model} | ${date}\n`;
-                });
-
-                const blob = new Blob([content], { type: 'text/plain' });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(a);
-                UI.showToast('Export complete', 'success');
-            },
-
-            init() {
-                // Allow Enter key to submit
-                document.getElementById('serial').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') document.getElementById('model').focus();
-                });
-                document.getElementById('model').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.submitRecord();
-                });
-
-                this.renderTable();
-            }
-        };
-
-        // ===== JSON FORMATTER MODULE =====
-        const JsonFormatter = {
-            updateIndent() {
-                if (document.getElementById('jsonOutput').value) {
-                    this.prettify();
-                }
-            },
-
-            countChars(text) {
-                return text.length;
-            },
-
-            updateStats(textId, statsId) {
-                const text = document.getElementById(textId).value;
-                const stats = document.getElementById(statsId);
-                const chars = this.countChars(text);
-                stats.innerHTML = `
-                    <span class="badge"><span class="badge-value">${chars}</span> chars</span>
-                    <span class="badge"><span class="badge-value">${text.split('\n').length}</span> lines</span>
-                `;
-            },
-
-            prettify() {
-                const input = document.getElementById('jsonInput').value.trim();
-                const error = document.getElementById('jsonError');
-                error.textContent = '';
-
-                if (!input) return;
-
-                try {
-                    const parsed = JSON.parse(input);
-                    const indent = document.getElementById('jsonIndent').value;
-                    const indentStr = indent === 'tab' ? '\t' : ' '.repeat(parseInt(indent));
-                    const output = JSON.stringify(parsed, null, indentStr);
-                    document.getElementById('jsonOutput').value = output;
-                    this.updateStats('jsonOutput', 'jsonOutputStats');
-                } catch (e) {
-                    error.textContent = '✗ Invalid JSON: ' + e.message;
-                }
-            },
-
-            minify() {
-                const input = document.getElementById('jsonInput').value.trim();
-                const error = document.getElementById('jsonError');
-                error.textContent = '';
-
-                if (!input) return;
-
-                try {
-                    const parsed = JSON.parse(input);
-                    const output = JSON.stringify(parsed);
-                    document.getElementById('jsonOutput').value = output;
-                    this.updateStats('jsonOutput', 'jsonOutputStats');
-                } catch (e) {
-                    error.textContent = '✗ Invalid JSON: ' + e.message;
-                }
-            },
-
-            clearInput() {
-                document.getElementById('jsonInput').value = '';
-                document.getElementById('jsonOutput').value = '';
-                document.getElementById('jsonError').textContent = '';
-                document.getElementById('jsonInputStats').innerHTML = '';
-                document.getElementById('jsonOutputStats').innerHTML = '';
-            },
-
-            copyOutput() {
-                const output = document.getElementById('jsonOutput');
-                if (!output.value) {
-                    UI.showToast('Nothing to copy', 'error');
-                    return;
-                }
-                navigator.clipboard.writeText(output.value);
-                UI.showToast('Copied to clipboard', 'success');
-            },
-
-            init() {
-                document.getElementById('jsonInput').addEventListener('input', () => {
-                    this.updateStats('jsonInput', 'jsonInputStats');
-                });
-            }
-        };
-
-        // ===== BASE64 MODULE =====
-        const Base64Tool = {
-            encode() {
-                const input = document.getElementById('base64Input').value;
-                try {
-                    const output = btoa(unescape(encodeURIComponent(input)));
-                    document.getElementById('base64Output').value = output;
-                    document.getElementById('base64Error').textContent = '';
-                } catch (e) {
-                    document.getElementById('base64Error').textContent = '✗ Error encoding: ' + e.message;
-                }
-            },
-
-            decode() {
-                const input = document.getElementById('base64DecodeInput').value;
-                try {
-                    const output = decodeURIComponent(escape(atob(input)));
-                    document.getElementById('base64DecodeOutput').value = output;
-                    document.getElementById('base64Error').textContent = '';
-                } catch (e) {
-                    document.getElementById('base64Error').textContent = '✗ Invalid base64: ' + e.message;
-                }
-            },
-
-            copyOutput() {
-                const output = document.getElementById('base64Output').value;
-                if (!output) {
-                    UI.showToast('Nothing to copy', 'error');
-                    return;
-                }
-                navigator.clipboard.writeText(output);
-                UI.showToast('Copied to clipboard', 'success');
-            },
-
-            copyDecoded() {
-                const output = document.getElementById('base64DecodeOutput').value;
-                if (!output) {
-                    UI.showToast('Nothing to copy', 'error');
-                    return;
-                }
-                navigator.clipboard.writeText(output);
-                UI.showToast('Copied to clipboard', 'success');
-            },
-
-            init() {}
-        };
-
-        // ===== TEXT TOOLS MODULE =====
-        const TextTools = {
-            updateStats() {
-                const text = document.getElementById('textInput').value;
-                const chars = text.length;
-                const charsNoSpace = text.replace(/\s/g, '').length;
-                const words = text.trim() ? text.trim().split(/\s+/).length : 0;
-                const lines = text ? text.split('\n').length : 0;
-                const sentences = (text.match(/[.!?]+/g) || []).length;
-
-                document.getElementById('textStats').innerHTML = `
-                    <span class="badge"><span class="badge-value">${chars}</span> chars</span>
-                    <span class="badge"><span class="badge-value">${charsNoSpace}</span> no spaces</span>
-                    <span class="badge"><span class="badge-value">${words}</span> words</span>
-                    <span class="badge"><span class="badge-value">${lines}</span> lines</span>
-                    <span class="badge"><span class="badge-value">${sentences}</span> sentences</span>
-                `;
-            },
-
-            convert(type) {
-                const input = document.getElementById('textInput');
-                let text = input.value;
-
-                switch (type) {
-                    case 'upper':
-                        text = text.toUpperCase();
-                        break;
-                    case 'lower':
-                        text = text.toLowerCase();
-                        break;
-                    case 'title':
-                        text = text.split(/\s+/).map(word => {
-                            const minorWords = ['a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with'];
-                            if (minorWords.includes(word.toLowerCase())) return word.toLowerCase();
-                            return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-                        }).join(' ');
-                        break;
-                    case 'sentence':
-                        text = text.toLowerCase();
-                        text = text.replace(/([.!?]\s+)/g, '. ').replace(/^\w/, c => c.toUpperCase());
-                        break;
-                    case 'camel':
-                        text = text.replace(/[_\-\s]+(.)/g, (_, c) => c.toUpperCase()).replace(/^(.)/, c => c.toLowerCase());
-                        break;
-                    case 'snake':
-                        text = text.replace(/\s+/g, '_').replace(/([A-Z])/g, '_$1').toLowerCase().replace(/^_/, '');
-                        break;
-                    case 'kebab':
-                        text = text.replace(/\s+/g, '-').replace(/([A-Z])/g, '-$1').toLowerCase().replace(/^-/, '');
-                        break;
-                }
-
-                input.value = text;
-                this.updateStats();
-            },
-
-            init() {
-                this.updateStats();
-            }
-        };
-
-        // ===== TIMESTAMP TOOL MODULE =====
-        const TimestampTool = {
-            updateClock() {
-                const now = Math.floor(Date.now() / 1000);
-                document.getElementById('currentUnix').textContent = now;
-            },
-
-            formatDate(date) {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                const hours = String(date.getHours()).padStart(2, '0');
-                const minutes = String(date.getMinutes()).padStart(2, '0');
-                const seconds = String(date.getSeconds()).padStart(2, '0');
-                return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-            },
-
-            getRelativeTime(timestamp) {
-                const now = Date.now();
-                const diff = now - timestamp;
-                const seconds = Math.floor(diff / 1000);
-                const minutes = Math.floor(seconds / 60);
-                const hours = Math.floor(minutes / 60);
-                const days = Math.floor(hours / 24);
-
-                if (seconds < 60) return seconds + 's ago';
-                if (minutes < 60) return minutes + 'm ago';
-                if (hours < 24) return hours + 'h ago';
-                if (days < 365) return days + 'd ago';
-                return Math.floor(days / 365) + 'y ago';
-            },
-
-            toHuman() {
-                const input = document.getElementById('unixInput').value.trim();
-                if (!input) {
-                    UI.showToast('Enter a Unix timestamp', 'error');
-                    return;
-                }
-
-                let timestamp = parseInt(input);
-                // Auto-detect if milliseconds (> 10^10)
-                if (timestamp > 10000000000) {
-                    timestamp = timestamp / 1000;
-                }
-
-                const date = new Date(timestamp * 1000);
-                const utcDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
-
-                document.getElementById('unixOutput').innerHTML = `
-                    <div class="timestamp-output-line">
-                        <span class="timestamp-output-label">Local:</span>
-                        <span class="timestamp-output-value">${this.formatDate(date)}</span>
-                    </div>
-                    <div class="timestamp-output-line">
-                        <span class="timestamp-output-label">UTC:</span>
-                        <span class="timestamp-output-value">${this.formatDate(utcDate)}</span>
-                    </div>
-                    <div class="timestamp-output-line">
-                        <span class="timestamp-output-label">ISO:</span>
-                        <span class="timestamp-output-value">${date.toISOString()}</span>
-                    </div>
-                    <div class="timestamp-output-line">
-                        <span class="timestamp-output-label">Relative:</span>
-                        <span class="timestamp-output-value">${this.getRelativeTime(date.getTime())}</span>
-                    </div>
-                `;
-            },
-
-            toUnix() {
-                const input = document.getElementById('humanInput').value;
-                if (!input) {
-                    UI.showToast('Enter a date and time', 'error');
-                    return;
-                }
-
-                const date = new Date(input);
-                const seconds = Math.floor(date.getTime() / 1000);
-                const ms = date.getTime();
-
-                document.getElementById('humanOutput').innerHTML = `
-                    <div class="timestamp-output-line">
-                        <span class="timestamp-output-label">Seconds:</span>
-                        <span class="timestamp-output-value">${seconds}</span>
-                    </div>
-                    <div class="timestamp-output-line">
-                        <span class="timestamp-output-label">Milliseconds:</span>
-                        <span class="timestamp-output-value">${ms}</span>
-                    </div>
-                    <div class="timestamp-output-line">
-                        <span class="timestamp-output-label">ISO:</span>
-                        <span class="timestamp-output-value">${date.toISOString()}</span>
-                    </div>
-                `;
-            },
-
-            useNowUnix() {
-                const now = Math.floor(Date.now() / 1000);
-                document.getElementById('unixInput').value = now;
-                this.toHuman();
-            },
-
-            useNowHuman() {
-                const now = new Date();
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                const day = String(now.getDate()).padStart(2, '0');
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                document.getElementById('humanInput').value = `${year}-${month}-${day}T${hours}:${minutes}`;
-                this.toUnix();
-            },
-
-            init() {
-                this.updateClock();
-                setInterval(() => this.updateClock(), 1000);
-            }
-        };
-
-        // ===== PASSWORD GENERATOR MODULE =====
-        const PasswordGen = {
-            updateLength() {
-                const val = document.getElementById('pwLength').value;
-                document.getElementById('pwLengthDisplay').textContent = val;
-                this.generate();
-            },
-
-            getCharacterPool() {
-                let pool = '';
-                const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                const lower = 'abcdefghijklmnopqrstuvwxyz';
-                const digits = '0123456789';
-                const symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-                let ambiguous = '';
-
-                if (document.getElementById('pwUppercase').checked) pool += upper;
-                if (document.getElementById('pwLowercase').checked) pool += lower;
-                if (document.getElementById('pwNumbers').checked) pool += digits;
-                if (document.getElementById('pwSymbols').checked) pool += symbols;
-
-                if (document.getElementById('pwExcludeAmbiguous').checked) {
-                    ambiguous = '0O1lI';
-                    pool = pool.split('').filter(c => !ambiguous.includes(c)).join('');
-                }
-
-                return pool;
-            },
-
-            generate() {
-                const pool = this.getCharacterPool();
-                if (pool.length === 0) {
-                    document.getElementById('pwOutput').value = '';
-                    return;
-                }
-
-                const length = parseInt(document.getElementById('pwLength').value);
-                const quantity = parseInt(document.getElementById('pwQuantity').value) || 1;
-                const passwords = [];
-
-                for (let q = 0; q < quantity; q++) {
-                    let pwd = '';
-                    for (let i = 0; i < length; i++) {
-                        pwd += pool.charAt(Math.floor(Math.random() * pool.length));
-                    }
-                    passwords.push(pwd);
-                }
-
-                document.getElementById('pwOutput').value = passwords.join('\n');
-
-                if (quantity === 1) {
-                    this.updateStrength(passwords[0]);
-                    document.getElementById('pwStrengthContainer').style.display = 'block';
-                } else {
-                    document.getElementById('pwStrengthContainer').style.display = 'none';
-                }
-            },
-
-            updateStrength(password) {
-                const pool = this.getCharacterPool();
-                const hasUpper = /[A-Z]/.test(password);
-                const hasLower = /[a-z]/.test(password);
-                const hasDigit = /[0-9]/.test(password);
-                const hasSymbol = /[!@#$%^&*()_+\-=\[\]{}|;:,.<>?]/.test(password);
-
-                let charClasses = 0;
-                if (hasUpper) charClasses++;
-                if (hasLower) charClasses++;
-                if (hasDigit) charClasses++;
-                if (hasSymbol) charClasses++;
-
-                let strength = 'Weak';
-                let filled = 1;
-                if (password.length >= 8 && charClasses >= 2) {
-                    strength = 'Fair';
-                    filled = 2;
-                }
-                if (password.length >= 12 && charClasses >= 3) {
-                    strength = 'Good';
-                    filled = 3;
-                }
-                if (password.length >= 16 && charClasses === 4) {
-                    strength = 'Strong';
-                    filled = 4;
-                }
-
-                const strengthMap = { 'Weak': 'weak', 'Fair': 'fair', 'Good': 'good', 'Strong': 'strong' };
-                const segments = document.querySelectorAll('.password-strength-segment');
-                segments.forEach((seg, i) => {
-                    seg.classList.remove('filled', 'weak', 'fair', 'good', 'strong');
-                    if (i < filled) {
-                        seg.classList.add('filled', strengthMap[strength]);
-                    }
-                });
-
-                document.getElementById('pwStrengthLabel').textContent = strength;
-            },
-
-            copyAll() {
-                const output = document.getElementById('pwOutput').value;
-                if (!output) {
-                    UI.showToast('Generate a password first', 'error');
-                    return;
-                }
-                navigator.clipboard.writeText(output);
-                UI.showToast('Copied to clipboard', 'success');
-            },
-
-            init() {
-                this.generate();
-            }
-        };
-
-        // ===== COLOR TOOLS MODULE =====
-        const ColorTools = {
-            hexToRgb(hex) {
-                const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-                return result ? {
-                    r: parseInt(result[1], 16),
-                    g: parseInt(result[2], 16),
-                    b: parseInt(result[3], 16)
-                } : null;
-            },
-
-            rgbToHex(r, g, b) {
-                return '#' + [r, g, b].map(x => {
-                    const hex = x.toString(16);
-                    return hex.length === 1 ? '0' + hex : hex;
-                }).join('').toUpperCase();
-            },
-
-            rgbToHsl(r, g, b) {
-                r /= 255;
-                g /= 255;
-                b /= 255;
-                const max = Math.max(r, g, b), min = Math.min(r, g, b);
-                let h, s, l = (max + min) / 2;
-
-                if (max === min) {
-                    h = s = 0;
-                } else {
-                    const d = max - min;
-                    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-                    switch (max) {
-                        case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
-                        case g: h = ((b - r) / d + 2) / 6; break;
-                        case b: h = ((r - g) / d + 4) / 6; break;
-                    }
-                }
-
-                return {
-                    h: Math.round(h * 360),
-                    s: Math.round(s * 100),
-                    l: Math.round(l * 100)
-                };
-            },
-
-            hexToOther() {
-                const hex = document.getElementById('colorHex').value;
-                if (!hex || hex.length < 7) return;
-
-                const rgb = this.hexToRgb(hex);
-                if (!rgb) return;
-
-                document.getElementById('colorR').value = rgb.r;
-                document.getElementById('colorG').value = rgb.g;
-                document.getElementById('colorB').value = rgb.b;
-                document.getElementById('colorPickerNative').value = hex;
-
-                const hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
-                document.getElementById('colorHsl').value = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
-
-                this.updatePreview();
-                this.generatePalette();
-            },
-
-            rgbToOther() {
-                const r = parseInt(document.getElementById('colorR').value) || 0;
-                const g = parseInt(document.getElementById('colorG').value) || 0;
-                const b = parseInt(document.getElementById('colorB').value) || 0;
-
-                const hex = this.rgbToHex(r, g, b);
-                document.getElementById('colorHex').value = hex;
-                document.getElementById('colorPickerNative').value = hex;
-
-                const hsl = this.rgbToHsl(r, g, b);
-                document.getElementById('colorHsl').value = `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`;
-
-                this.updatePreview();
-                this.generatePalette();
-            },
-
-            pickerToHex() {
-                const hex = document.getElementById('colorPickerNative').value;
-                document.getElementById('colorHex').value = hex;
-                this.hexToOther();
-            },
-
-            updatePreview() {
-                const hex = document.getElementById('colorHex').value;
-                const preview = document.getElementById('colorPreview');
-                preview.style.backgroundColor = hex;
-
-                // Auto-contrast text
-                const rgb = this.hexToRgb(hex);
-                if (rgb) {
-                    const luminance = (0.299 * rgb.r + 0.587 * rgb.g + 0.114 * rgb.b) / 255;
-                    preview.style.color = luminance > 0.5 ? '#000' : '#fff';
-                }
-
-                preview.textContent = hex;
-            },
-
-            generatePalette() {
-                const hex = document.getElementById('colorHex').value;
-                const rgb = this.hexToRgb(hex);
-                if (!rgb) return;
-
-                const hsl = this.rgbToHsl(rgb.r, rgb.g, rgb.b);
-                const palette = [];
-
-                // Current + 2 tints + 2 shades
-                palette.push(hex);
-
-                // Tints (lighter)
-                for (let i = 1; i <= 2; i++) {
-                    const lightness = Math.min(hsl.l + (15 * i), 95);
-                    const rgbLight = this.hslToRgb(hsl.h, hsl.s, lightness);
-                    palette.push(this.rgbToHex(rgbLight.r, rgbLight.g, rgbLight.b));
-                }
-
-                // Shades (darker)
-                for (let i = 1; i <= 2; i++) {
-                    const lightness = Math.max(hsl.l - (15 * i), 5);
-                    const rgbDark = this.hslToRgb(hsl.h, hsl.s, lightness);
-                    palette.push(this.rgbToHex(rgbDark.r, rgbDark.g, rgbDark.b));
-                }
-
-                const paletteDiv = document.getElementById('colorPalette');
-                paletteDiv.innerHTML = palette.map(color => `
-                    <div class="color-swatch">
-                        <div class="color-swatch-box" style="background-color: ${color};"></div>
-                        <span class="color-swatch-label">${color}</span>
-                    </div>
-                `).join('');
-
-                // Add copy handlers
-                document.querySelectorAll('.color-swatch-box').forEach((box, i) => {
-                    box.style.cursor = 'pointer';
-                    box.addEventListener('click', () => {
-                        navigator.clipboard.writeText(palette[i]);
-                        UI.showToast('Copied: ' + palette[i], 'success');
-                    });
-                });
-            },
-
-            hslToRgb(h, s, l) {
-                h = h / 360;
-                s = s / 100;
-                l = l / 100;
-
-                let r, g, b;
-                if (s === 0) {
-                    r = g = b = l;
-                } else {
-                    const hue2rgb = (p, q, t) => {
-                        if (t < 0) t += 1;
-                        if (t > 1) t -= 1;
-                        if (t < 1/6) return p + (q - p) * 6 * t;
-                        if (t < 1/2) return q;
-                        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-                        return p;
-                    };
-
-                    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-                    const p = 2 * l - q;
-                    r = hue2rgb(p, q, h + 1/3);
-                    g = hue2rgb(p, q, h);
-                    b = hue2rgb(p, q, h - 1/3);
-                }
-
-                return {
-                    r: Math.round(r * 255),
-                    g: Math.round(g * 255),
-                    b: Math.round(b * 255)
-                };
-            },
-
-            copyHex() {
-                const hex = document.getElementById('colorHex').value;
-                navigator.clipboard.writeText(hex);
-                UI.showToast('Copied: ' + hex, 'success');
-            },
-
-            copyRgb() {
-                const r = document.getElementById('colorR').value;
-                const g = document.getElementById('colorG').value;
-                const b = document.getElementById('colorB').value;
-                const rgb = `rgb(${r}, ${g}, ${b})`;
-                navigator.clipboard.writeText(rgb);
-                UI.showToast('Copied: ' + rgb, 'success');
-            },
-
-            copyHsl() {
-                const hsl = document.getElementById('colorHsl').value;
-                navigator.clipboard.writeText(hsl);
-                UI.showToast('Copied: ' + hsl, 'success');
-            },
-
-            updateContrast() {
-                const fgHex = document.getElementById('contrastFg').value;
-                const bgHex = document.getElementById('contrastBg').value;
-
-                const fgRgb = this.hexToRgb(fgHex);
-                const bgRgb = this.hexToRgb(bgHex);
-
-                if (!fgRgb || !bgRgb) return;
-
-                const fgLum = (0.299 * fgRgb.r + 0.587 * fgRgb.g + 0.114 * fgRgb.b) / 255;
-                const bgLum = (0.299 * bgRgb.r + 0.587 * bgRgb.g + 0.114 * bgRgb.b) / 255;
-
-                const lighter = Math.max(fgLum, bgLum);
-                const darker = Math.min(fgLum, bgLum);
-                const ratio = ((lighter + 0.05) / (darker + 0.05)).toFixed(2);
-
-                document.getElementById('contrastRatioValue').textContent = ratio;
-
-                const badges = document.getElementById('contrastBadges');
-                let html = '';
-
-                const checks = [
-                    { level: 'AA Normal', min: 4.5 },
-                    { level: 'AAA Normal', min: 7 },
-                    { level: 'AA Large', min: 3 },
-                    { level: 'AAA Large', min: 4.5 }
-                ];
-
-                checks.forEach(check => {
-                    const passed = ratio >= check.min;
-                    html += `<span class="color-contrast-badge ${passed ? 'color-contrast-pass' : 'color-contrast-fail'}">
-                        ${passed ? '✓' : '✗'} ${check.level}
-                    </span>`;
-                });
-
-                badges.innerHTML = html;
-            },
-
-            init() {
-                this.hexToOther();
-                this.updateContrast();
-            }
-        };
-
-        // ===== WORLD TIME MODULE =====
-        const WorldTime = {
-            cities: [
-                { name: 'London', tz: 'Europe/London' },
-                { name: 'Paris', tz: 'Europe/Paris' },
-                { name: 'Dubai', tz: 'Asia/Dubai' },
-                { name: 'Tokyo', tz: 'Asia/Tokyo' },
-                { name: 'Sydney', tz: 'Australia/Sydney' },
-                { name: 'New York', tz: 'America/New_York' },
-                { name: 'Los Angeles', tz: 'America/Los_Angeles' },
-                { name: 'São Paulo', tz: 'America/Sao_Paulo' },
-                { name: 'Hong Kong', tz: 'Asia/Hong_Kong' },
-                { name: 'Singapore', tz: 'Asia/Singapore' }
-            ],
-
-            formatTimeForTz(date, tz) {
-                const formatter = new Intl.DateTimeFormat('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    timeZone: tz
-                });
-                return formatter.format(date);
-            },
-
-            formatDateForTz(date, tz) {
-                const formatter = new Intl.DateTimeFormat('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: '2-digit',
-                    timeZone: tz
-                });
-                return formatter.format(date);
-            },
-
-            getOffsetForTz(date, tz) {
-                const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
-                const tzDate = new Date(date.toLocaleString('en-US', { timeZone: tz }));
-                const offset = (tzDate - utcDate) / (1000 * 60 * 60);
-                const sign = offset >= 0 ? '+' : '';
-                return sign + offset.toFixed(1);
-            },
-
-            renderCities() {
-                const now = new Date();
-                const grid = document.getElementById('worldtimeGrid');
-                grid.innerHTML = '';
-
-                this.cities.forEach(city => {
-                    const time = this.formatTimeForTz(now, city.tz);
-                    const date = this.formatDateForTz(now, city.tz);
-                    const offset = this.getOffsetForTz(now, city.tz);
-
-                    const card = document.createElement('div');
-                    card.className = 'worldtime-card';
-                    card.innerHTML = `
-                        <div class="worldtime-city">${city.name}</div>
-                        <div class="worldtime-timezone">${city.tz}</div>
-                        <div class="worldtime-time">${time}</div>
-                        <div class="worldtime-date">${date}</div>
-                        <div class="worldtime-offset">UTC ${offset}</div>
-                    `;
-                    grid.appendChild(card);
-                });
-            },
-
-            updateConversion() {
-                const sourceTz = document.getElementById('wtSourceTz').value;
-                const targetTz = document.getElementById('wtTargetTz').value;
-                const sourceTime = document.getElementById('wtSourceTime').value;
-
-                if (!sourceTime) {
-                    document.getElementById('wtConversionResult').innerHTML = '';
-                    return;
-                }
-
-                // Parse the datetime-local value
-                const date = new Date(sourceTime);
-                // Adjust for the source timezone to get UTC
-                const sourceFormatter = new Intl.DateTimeFormat('en-US', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    hour12: false,
-                    timeZone: sourceTz
-                });
-                const parts = sourceFormatter.formatToParts(date);
-                const dateMap = {};
-                parts.forEach(p => dateMap[p.type] = p.value);
-
-                // Create a UTC date from the source timezone values
-                const utcDate = new Date(
-                    Date.UTC(
-                        parseInt(dateMap.year),
-                        parseInt(dateMap.month) - 1,
-                        parseInt(dateMap.day),
-                        parseInt(dateMap.hour),
-                        parseInt(dateMap.minute),
-                        parseInt(dateMap.second)
-                    )
-                );
-
-                // Now format this UTC date in the target timezone
-                const targetTime = this.formatTimeForTz(utcDate, targetTz);
-                const targetDate = this.formatDateForTz(utcDate, targetTz);
-                const targetOffset = this.getOffsetForTz(utcDate, targetTz);
-
-                const sourceLabel = document.getElementById('wtSourceTz').options[document.getElementById('wtSourceTz').selectedIndex].text;
-                const targetLabel = document.getElementById('wtTargetTz').options[document.getElementById('wtTargetTz').selectedIndex].text;
-
-                document.getElementById('wtConversionResult').innerHTML = `
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px;">
-                        <div class="worldtime-converter-result">
-                            <div class="worldtime-converter-result-label">From (${sourceLabel})</div>
-                            <div class="worldtime-converter-result-value">${sourceTime.split('T')[1]}</div>
-                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">${sourceTime.split('T')[0]}</div>
-                        </div>
-                        <div class="worldtime-converter-result">
-                            <div class="worldtime-converter-result-label">To (${targetLabel})</div>
-                            <div class="worldtime-converter-result-value">${targetTime}</div>
-                            <div style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">${targetDate}</div>
-                        </div>
-                    </div>
-                `;
-            },
-
-            useNowForConversion() {
-                const now = new Date();
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                const day = String(now.getDate()).padStart(2, '0');
-                const hours = String(now.getHours()).padStart(2, '0');
-                const minutes = String(now.getMinutes()).padStart(2, '0');
-                document.getElementById('wtSourceTime').value = `${year}-${month}-${day}T${hours}:${minutes}`;
-                this.updateConversion();
-            },
-
-            init() {
-                this.renderCities();
-                // Update cities every second
-                setInterval(() => this.renderCities(), 1000);
-            }
-        };
-
-        // ===== UNIVERSAL CLOCK MODULE =====
-        const UniversalClock = {
-            cities: [
-                { name: 'New York', tz: 'America/New_York' },
-                { name: 'London', tz: 'Europe/London' },
-                { name: 'Tokyo', tz: 'Asia/Tokyo' },
-                { name: 'Sydney', tz: 'Australia/Sydney' },
-                { name: 'Dubai', tz: 'Asia/Dubai' },
-                { name: 'Singapore', tz: 'Asia/Singapore' },
-                { name: 'Paris', tz: 'Europe/Paris' },
-                { name: 'Hong Kong', tz: 'Asia/Hong_Kong' }
-            ],
-
-            updateClock() {
-                const now = new Date();
-                const hours = now.getUTCHours();
-                const minutes = now.getUTCMinutes();
-                const seconds = now.getUTCSeconds();
-
-                // Update digital clock
-                const digital = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-                document.getElementById('uniclockDigital').textContent = digital;
-
-                // Update analog clock hands
-                const hourDeg = (hours % 12 * 30) + (minutes * 0.5);
-                const minuteDeg = minutes * 6 + (seconds * 0.1);
-                const secondDeg = seconds * 6;
-
-                document.getElementById('uniclockHour').style.transform = `rotate(${hourDeg}deg)`;
-                document.getElementById('uniclockMinute').style.transform = `rotate(${minuteDeg}deg)`;
-                document.getElementById('uniclockSecond').style.transform = `rotate(${secondDeg}deg)`;
-            },
-
-            formatTimeForTz(date, tz) {
-                const formatter = new Intl.DateTimeFormat('en-US', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit',
-                    timeZone: tz
-                });
-                return formatter.format(date);
-            },
-
-            renderCities() {
-                const now = new Date();
-                const citiesDiv = document.getElementById('uniclockCities');
-                citiesDiv.innerHTML = '';
-
-                this.cities.forEach(city => {
-                    const time = this.formatTimeForTz(now, city.tz);
-                    const card = document.createElement('div');
-                    card.className = 'uniclock-city-card';
-                    card.innerHTML = `
-                        <div class="uniclock-city-name">${city.name}</div>
-                        <div class="uniclock-city-time">${time}</div>
-                        <div class="uniclock-city-tz">${city.tz}</div>
-                    `;
-                    citiesDiv.appendChild(card);
-                });
-            },
-
-            init() {
-                this.updateClock();
-                this.renderCities();
-                // Update every second
-                setInterval(() => {
-                    this.updateClock();
-                    this.renderCities();
-                }, 1000);
-            }
-        };
-
-        // ===== POKEMON GAME MODULE =====
-        const PokemonGame = {
-            player: null,
-            enemy: null,
-            state: 'idle',
-            pokemonList: [],
-
-            async init() {
-                // Fetch list of all Pokemon for random selection
-                try {
-                    const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
-                    const data = await res.json();
-                    this.pokemonList = data.results.map((p, i) => i + 1); // IDs 1-151
-                } catch (e) {
-                    UI.showToast('Failed to load Pokemon data', 'error');
-                    this.pokemonList = Array.from({length: 151}, (_, i) => i + 1);
-                }
-
-                document.getElementById('newBattleBtn').addEventListener('click', () => this.startBattle());
-                document.getElementById('attackBtn').addEventListener('click', () => this.attack());
-                document.getElementById('catchBtn').addEventListener('click', () => this.tryCatch());
-                document.getElementById('runBtn').addEventListener('click', () => this.run());
-            },
-
-            async fetchPokemon(id) {
-                try {
-                    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-                    const data = await res.json();
-                    return {
-                        id: data.id,
-                        name: data.name,
-                        sprite: data.sprites.front_default || '',
-                        hp: Math.floor(Math.random() * 50) + 50,
-                        maxHp: Math.floor(Math.random() * 50) + 50,
-                        attack: Math.floor(Math.random() * 20) + 15,
-                        defense: Math.floor(Math.random() * 15) + 10,
-                        level: Math.floor(Math.random() * 20) + 5
-                    };
-                } catch (e) {
-                    UI.showToast('Failed to fetch Pokemon', 'error');
-                    return null;
-                }
-            },
-
-            getRandomPokemonId() {
-                return this.pokemonList[Math.floor(Math.random() * this.pokemonList.length)];
-            },
-
-            async startBattle() {
-                this.state = 'battle';
-                document.getElementById('pokemonArena').style.display = 'flex';
-
-                const playerId = this.getRandomPokemonId();
-                const enemyId = this.getRandomPokemonId();
-
-                this.player = await this.fetchPokemon(playerId);
-                this.enemy = await this.fetchPokemon(enemyId);
-
-                if (!this.player || !this.enemy) {
-                    this.log('Failed to load Pokemon!');
-                    return;
-                }
-
-                this.log(`A wild ${this.enemy.name} appeared!`);
-                this.log(`Go, ${this.player.name}!`);
-
-                this.updateUI();
-                document.getElementById('attackBtn').disabled = false;
-                document.getElementById('catchBtn').disabled = false;
-                document.getElementById('runBtn').disabled = false;
-                document.getElementById('newBattleBtn').disabled = true;
-            },
-
-            attack() {
-                if (this.state !== 'battle' || !this.player || !this.enemy) return;
-
-                const damage = Math.floor(Math.random() * 20) + (this.player.attack - this.enemy.defense);
-                this.enemy.hp = Math.max(0, this.enemy.hp - Math.abs(damage));
-
-                this.log(`${this.player.name} used Tackle! Dealt ${Math.abs(damage)} damage.`);
-
-                if (this.enemy.hp <= 0) {
-                    this.log(`${this.enemy.name} fainted! You won!`);
-                    this.endBattle();
-                    return;
-                }
-
-                this.enemyAttack();
-            },
-
-            enemyAttack() {
-                const damage = Math.floor(Math.random() * 15) + (this.enemy.attack - this.player.defense);
-                this.player.hp = Math.max(0, this.player.hp - Math.abs(damage));
-
-                this.log(`${this.enemy.name} used Tackle! Dealt ${Math.abs(damage)} damage.`);
-
-                if (this.player.hp <= 0) {
-                    this.log(`${this.player.name} fainted! You lost!`);
-                    this.endBattle();
-                    return;
-                }
-
-                this.updateUI();
-            },
-
-            tryCatch() {
-                if (this.state !== 'battle' || !this.enemy) return;
-
-                const hpPercent = this.enemy.hp / this.enemy.maxHp;
-                const catchChance = Math.max(0.1, 1 - hpPercent); // Higher chance when enemy is weaker
-
-                if (Math.random() < catchChance) {
-                    this.log(`Got ${this.enemy.name}!`);
-                    this.endBattle();
-                    UI.showToast(`Caught ${this.enemy.name}!`, 'success');
-                } else {
-                    this.log(`${this.enemy.name} broke free!`);
-                    this.enemyAttack();
-                }
-            },
-
-            run() {
-                if (this.state !== 'battle') return;
-                this.log('Ran away from battle!');
-                this.endBattle();
-            },
-
-            endBattle() {
-                this.state = 'idle';
-                document.getElementById('attackBtn').disabled = true;
-                document.getElementById('catchBtn').disabled = true;
-                document.getElementById('runBtn').disabled = true;
-                document.getElementById('newBattleBtn').disabled = false;
-            },
-
-            updateUI() {
-                if (!this.player || !this.enemy) return;
-
-                const playerHpPercent = (this.player.hp / this.player.maxHp) * 100;
-                const enemyHpPercent = (this.enemy.hp / this.enemy.maxHp) * 100;
-
-                document.getElementById('playerName').textContent = this.player.name;
-                document.getElementById('playerLevel').textContent = `Lv. ${this.player.level}`;
-                document.getElementById('playerSprite').src = this.player.sprite;
-                document.getElementById('playerHpBar').style.width = playerHpPercent + '%';
-                document.getElementById('playerHpText').textContent = `HP: ${this.player.hp}/${this.player.maxHp}`;
-
-                document.getElementById('enemyName').textContent = this.enemy.name;
-                document.getElementById('enemyLevel').textContent = `Lv. ${this.enemy.level}`;
-                document.getElementById('enemySprite').src = this.enemy.sprite;
-                document.getElementById('enemyHpBar').style.width = enemyHpPercent + '%';
-                document.getElementById('enemyHpText').textContent = `HP: ${this.enemy.hp}/${this.enemy.maxHp}`;
-            },
-
-            log(message) {
-                const logBox = document.getElementById('battleLog');
-                const timestamp = new Date().toLocaleTimeString();
-                logBox.value += `[${timestamp}] ${message}\n`;
-                logBox.scrollTop = logBox.scrollHeight;
-            }
-        };
-
-        // ===== GAMERTAG GENERATOR MODULE =====
-        const GamertagGenerator = {
-            styles: {
-                fantasy: ['Ember', 'Shadow', 'Frost', 'Storm', 'Dragon', 'Phoenix', 'Raven', 'Wolf', 'Viper', 'Blade', 'Knight', 'Sage', 'Mystic', 'Lunar', 'Solar'],
-                tech: ['Cyber', 'Nexus', 'Volt', 'Pixel', 'Code', 'Matrix', 'Byte', 'Circuit', 'Stream', 'Sync', 'Pulse', 'Logic', 'Data', 'Turbo', 'Nova'],
-                cool: ['Ace', 'Boss', 'King', 'Pro', 'Elite', 'Ninja', 'Titan', 'Slick', 'Swift', 'Sniper', 'Ghost', 'Venom', 'Blaze', 'Void', 'Peak'],
-                animal: ['Tiger', 'Eagle', 'Shark', 'Falcon', 'Panther', 'Cobra', 'Lynx', 'Reaper', 'Badger', 'Rook', 'Mantis', 'Jackal', 'Puma', 'Orca', 'Hawk']
-            },
-            suffixes: ['X', 'Z', '99', '2K', 'Pro', 'Max', 'Ultra', 'Prime', 'Elite', 'Apex', '007', 'Fury', 'Force', 'Master', 'Legend'],
-
-            init() {
-                document.getElementById('generateBtn').addEventListener('click', () => this.generate());
-                document.getElementById('gamertagCount').addEventListener('input', (e) => {
-                    document.getElementById('countDisplay').textContent = e.target.value;
-                });
-            },
-
-            generate() {
-                const style = document.getElementById('gamertagStyle').value;
-                const count = parseInt(document.getElementById('gamertagCount').value);
-                const list = document.getElementById('gamertagList');
-
-                list.innerHTML = '';
-                const generated = new Set();
-
-                for (let i = 0; i < count; i++) {
-                    let tag;
-                    do {
-                        tag = this.generateOne(style);
-                    } while (generated.has(tag));
-                    generated.add(tag);
-
-                    const item = document.createElement('div');
-                    item.className = 'gamertag-item';
-                    item.innerHTML = `
-                        <span class="gamertag-text">${tag}</span>
-                        <button class="gamertag-copy-btn" onclick="this.textContent = 'Copied!'; setTimeout(() => this.textContent = 'Copy', 2000); navigator.clipboard.writeText('${tag}')">Copy</button>
-                    `;
-                    list.appendChild(item);
-                }
-            },
-
-            generateOne(style) {
-                const words = this.styles[style];
-                const word = words[Math.floor(Math.random() * words.length)];
-                const suffix = Math.random() > 0.6 ? this.suffixes[Math.floor(Math.random() * this.suffixes.length)] : '';
-                const number = Math.random() > 0.5 ? Math.floor(Math.random() * 999) : '';
-
-                return word + suffix + number;
-            }
-        };
-
-        // ===== KOJI GOLF MODULE =====
-        const KojiGolf = {
-            canvas: null,
-            ctx: null,
-            ball: { x: 100, y: 300, radius: 6, vx: 0, vy: 0, friction: 0.985 },
-            hole: { x: 500, y: 100, radius: 12 },
-            currentHole: 1,
-            totalHoles: 3,
-            strokes: 0,
-            aiming: false,
-            power: 0,
-            aimAngle: 0,
-            holes: [
-                { hole: { x: 500, y: 100, radius: 12 }, obstacles: [{x: 300, y: 200, w: 80, h: 20}] },
-                { hole: { x: 520, y: 350, radius: 12 }, obstacles: [{x: 200, y: 150, w: 20, h: 150}, {x: 400, y: 250, w: 150, h: 20}] },
-                { hole: { x: 550, y: 180, radius: 12 }, obstacles: [{x: 150, y: 280, w: 300, h: 20}] }
-            ],
-
-            init() {
-                this.canvas = document.getElementById('golfCanvas');
-                this.ctx = this.canvas.getContext('2d');
-                this.canvas.addEventListener('click', (e) => this.handleCanvasClick(e));
-                this.canvas.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-                document.getElementById('powerUpBtn').addEventListener('click', () => this.toggleAiming());
-                document.getElementById('resetHoleBtn').addEventListener('click', () => this.resetHole());
-                document.getElementById('newGameBtn').addEventListener('click', () => this.newGame());
-                this.newGame();
-            },
-
-            newGame() {
-                this.currentHole = 1;
-                this.strokes = 0;
-                this.loadHole(this.currentHole);
-            },
-
-            loadHole(holeNum) {
-                const hole = this.holes[holeNum - 1];
-                this.hole = { ...hole.hole };
-                this.obstacles = hole.obstacles.map(o => ({...o}));
-                this.ball = { x: 100, y: 300, radius: 6, vx: 0, vy: 0, friction: 0.985 };
-                this.aiming = false;
-                this.power = 0;
-                this.draw();
-            },
-
-            resetHole() {
-                this.ball = { x: 100, y: 300, radius: 6, vx: 0, vy: 0, friction: 0.985 };
-                this.aiming = false;
-                this.power = 0;
-                this.draw();
-            },
-
-            handleMouseMove(e) {
-                if (!this.aiming) return;
-                const rect = this.canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                this.aimAngle = Math.atan2(y - this.ball.y, x - this.ball.x);
-                this.draw();
-            },
-
-            handleCanvasClick(e) {
-                if (this.aiming) {
-                    this.power = Math.min(100, this.power + 2);
-                    if (this.power >= 100) this.shoot();
-                    this.draw();
-                } else {
-                    this.aiming = true;
-                    this.power = 0;
-                }
-            },
-
-            shoot() {
-                this.aiming = false;
-                const speed = this.power / 10;
-                this.ball.vx = Math.cos(this.aimAngle) * speed;
-                this.ball.vy = Math.sin(this.aimAngle) * speed;
-                this.strokes++;
-                this.power = 0;
-            },
-
-            update() {
-                if (Math.abs(this.ball.vx) < 0.1 && Math.abs(this.ball.vy) < 0.1) {
-                    this.ball.vx = 0;
-                    this.ball.vy = 0;
-                }
-
-                this.ball.x += this.ball.vx;
-                this.ball.y += this.ball.vy;
-                this.ball.vx *= this.ball.friction;
-                this.ball.vy *= this.ball.friction;
-
-                // Bounce off walls
-                if (this.ball.x - this.ball.radius < 0 || this.ball.x + this.ball.radius > this.canvas.width) {
-                    this.ball.vx *= -0.8;
-                    this.ball.x = Math.max(this.ball.radius, Math.min(this.canvas.width - this.ball.radius, this.ball.x));
-                }
-                if (this.ball.y - this.ball.radius < 0 || this.ball.y + this.ball.radius > this.canvas.height) {
-                    this.ball.vy *= -0.8;
-                    this.ball.y = Math.max(this.ball.radius, Math.min(this.canvas.height - this.ball.radius, this.ball.y));
-                }
-
-                // Collision with obstacles
-                this.obstacles.forEach(obs => {
-                    if (this.ball.x > obs.x && this.ball.x < obs.x + obs.w &&
-                        this.ball.y > obs.y && this.ball.y < obs.y + obs.h) {
-                        this.ball.vx *= -0.8;
-                        this.ball.vy *= -0.8;
-                    }
-                });
-
-                // Check if ball in hole
-                const dist = Math.hypot(this.ball.x - this.hole.x, this.ball.y - this.hole.y);
-                if (dist < this.hole.radius + this.ball.radius && Math.abs(this.ball.vx) < 1 && Math.abs(this.ball.vy) < 1) {
-                    if (this.currentHole < this.totalHoles) {
-                        this.currentHole++;
-                        this.loadHole(this.currentHole);
-                        UI.showToast(`Hole ${this.currentHole - 1} complete! Moving to hole ${this.currentHole}`, 'success');
-                    } else {
-                        UI.showToast(`Game Complete! Total strokes: ${this.strokes}`, 'success');
-                        this.newGame();
-                    }
-                }
-            },
-
-            draw() {
-                this.ctx.fillStyle = '#1a4d2e';
-                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-                // Draw obstacles
-                this.ctx.fillStyle = 'rgba(255, 179, 0, 0.6)';
-                this.obstacles.forEach(obs => {
-                    this.ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
-                });
-
-                // Draw hole
-                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-                this.ctx.beginPath();
-                this.ctx.arc(this.hole.x, this.hole.y, this.hole.radius, 0, Math.PI * 2);
-                this.ctx.fill();
-                this.ctx.strokeStyle = '#00d4ff';
-                this.ctx.lineWidth = 2;
-                this.ctx.stroke();
-
-                // Draw ball
-                this.ctx.fillStyle = '#ffffff';
-                this.ctx.beginPath();
-                this.ctx.arc(this.ball.x, this.ball.y, this.ball.radius, 0, Math.PI * 2);
-                this.ctx.fill();
-
-                // Draw aim line
-                if (this.aiming) {
-                    this.ctx.strokeStyle = `rgba(0, 212, 255, ${this.power / 100})`;
-                    this.ctx.lineWidth = 3;
-                    this.ctx.setLineDash([5, 5]);
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(this.ball.x, this.ball.y);
-                    this.ctx.lineTo(
-                        this.ball.x + Math.cos(this.aimAngle) * 150,
-                        this.ball.y + Math.sin(this.aimAngle) * 150
-                    );
-                    this.ctx.stroke();
-                    this.ctx.setLineDash([]);
-                }
-
-                // Update UI
-                document.getElementById('holeNumber').textContent = `${this.currentHole}/${this.totalHoles}`;
-                document.getElementById('strokeCount').textContent = this.strokes;
-                document.getElementById('powerDisplay').textContent = this.aiming ? `${this.power}%` : '0%';
-
-                if (this.ball.vx !== 0 || this.ball.vy !== 0 || this.aiming) {
-                    this.update();
-                    requestAnimationFrame(() => this.draw());
-                }
-            }
-        };
-
-        // ===== INIT =====
-        document.addEventListener('DOMContentLoaded', App.init);
+            });
+        });
     </script>
 </body>
 </html>
