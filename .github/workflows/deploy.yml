@@ -16,6 +16,34 @@ jobs:
           with:
             host: criketmail.com
             username: crikytqu
-            key: ${{ secrets.SSH_KEY }}
+            key: -----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABDWrjDnuP
+XbmHoDpnryMOvCAAAAEAAAAAEAAAEXAAAAB3NzaC1yc2EAAAADAQABAAABAQDIM4Z7AsWL
+k9axDuVe+bc+AJHJLGuM8KV/Gaplimj4GUCoZEn47E2Xe8ST/4T8cHnziW32rAjDuHC8Rp
+5Asnxl75jh9QKA7g8waU/ddULJ/skYycQU4Orn/dcoQtt/u2LKrk2e6g64VxIkkArcsEuV
+V0ilOjsmq0uJZV2BPAxTZGiN4nRqwKlFzdJnT138KBHiM1XRW/fPVZHo8W+xc0lsU5mvms
+KsjK/Cjl7ttFpHcSnZfmj1JTNe3q6MalODD3dyTCkvh16Ju7rLsKXiQnNnoBI8/KzFAnJZ
+lvJzZgQpeeBYrSyFsyFE2Y+gC6UK1kkmQMsCH1sjjPuVDGf+Ee7BAAADwJYJXtbV/ifvJv
+UPPn0XszSzkEdwsA4XMeqUY3PbIefRzVn+8SmZtEY27bRF7qNsr+Jgjcq30LaD5cMPgqvy
+QaLZwjLYSkbekIOp/3ueuHdvVvhRr8Kvep5Wk7+Il5v54+ct6sc45gjqOq3WROpA0r6LgM
+CJ238Ii9N9yUtddA0IWOcDzViJTRbA4q0BVFDiG79sU7R9tTDzT7rBgSSJ4siQLsBe4x/V
+M+4cLciOn9TukR7FM3Av6bAIiSwh44gptKPDjVUZJbymTNW+UanMJVDNQrX1vCHQE9FFpn
+wvL0TISDAJxmN4yUi/dt3zjWmP76gFu/P0fW29KrwmFuwzYU7r8bf0tSXTIAc1QfAyUESv
+F1vd4XHps9JqWJwk6ldmzir/CY2FDAr83Agpt+XzRjmHkV7/rih/yDDX7FPkfgKPY+DIfn
+uME1UazFxmMealKz4vBgDAqwsrIQAHvXstBlnraFni9UWU/rjHfy65RiP1XT0ZswS5GbY1
+67CHtkHeV6uLHals6NgygeaEArnJaMJM2uFGORe4YP0WQJXk8MGGcd+zyf5fWnveoT1XmO
+uppjv7gYVCOK+8g5uOvQFk+Bi+14eZW8vseTd8218r1qqiA82lZR3+NaDx7xAEd7pzdohn
+1u1Nbk8nbaVvbJ2M3xXEcUr+/euQKfvPRlOy6I6c+EhwVyziywq4JY5fNpYnKDebKdDtfO
+2OMQ8kpOxOhaMoPDTdE+SLUPCXJlwW2hNdaqBV12tUN74TCKXc+rpp6pFhFEqbBBiLN4kn
+joEXFHZfRbHlDC/jJouTi6MaB0jIG06rus/UZhzFyMKr13RjuZHhd4DeCZbeEEMAR3MXYW
+uzLdhENEi0SBm6AFB1CgxYdU8Ck6cBM8tsFwweMO+x+9+wuWTjHpgYD3NzYSlCL0D2q30t
+4kRQ+mST4JcphTEtmwn0jjpc8yWId1/Qhuu0k4u+tejcqcRat4mevVk3yleUTFjU0k9tzj
+BDXNDlmt0Nbd70I/21fIw7RwEpbr0iw1z5DvkVyotqdtG7TwepIkopGmxoJjjVcNEJRfBg
+NAJhXoLrHG5nAC079U5V6XMxNX6kG1+gKmEus+rCCYU/TdPl0WlsazJWlIhsdrcyTKCs1W
+xBMvfmnWNqmyWCRrNreeYGvzMnDYrzjErTEP6qCr79dIG/iXWJsq3MKw7sO/c4qNkngBaF
+yRjEo2lWEBYpU4AIfs54HZQoHnFw8VCP/G+qQ0rQlcO1hyzRAbuMU0CvwgSOXSLSwK9f9W
+/XdhOBXw==
+-----END OPENSSH PRIVATE KEY-----
+
             source: "index.html"
             target: "/home/crikytqu/public_html/"
