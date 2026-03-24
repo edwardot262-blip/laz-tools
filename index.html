@@ -106,7 +106,7 @@
             flex-shrink: 0;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
+            overflow: hidden;
             transition: width var(--transition);
             z-index: 100;
         }
@@ -168,6 +168,8 @@
             display: flex;
             flex-direction: column;
             gap: 4px;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .nav-item {
@@ -1107,6 +1109,137 @@
             background: var(--accent-primary);
         }
 
+        /* ===== POKEMON GAME ===== */
+        .pokemon-arena {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .pokemon-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--bg-border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            width: 220px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
+        }
+
+        .pokemon-card-title {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .pokemon-sprite {
+            width: 120px;
+            height: 120px;
+            image-rendering: pixelated;
+            margin: 10px auto;
+            display: block;
+        }
+
+        .pokemon-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin: 10px 0;
+            text-transform: capitalize;
+        }
+
+        .pokemon-level {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .hp-bar-container {
+            background: var(--bg-base);
+            border-radius: 4px;
+            height: 16px;
+            overflow: hidden;
+            margin: 10px 0;
+            border: 1px solid var(--bg-border);
+        }
+
+        .hp-bar {
+            background: linear-gradient(90deg, var(--accent-secondary) 0%, var(--accent-warning) 50%, var(--accent-danger) 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hp-text {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+        }
+
+        .battle-log {
+            background: var(--bg-base);
+            border: 1px solid var(--bg-border);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            height: 150px;
+            resize: vertical;
+            margin: 12px 0;
+        }
+
+        .battle-log:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .battle-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .battle-actions button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 900px) {
+            .pokemon-arena {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .battle-actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .pokemon-card {
+                width: 100%;
+            }
+
+            .pokemon-sprite {
+                width: 80px;
+                height: 80px;
+            }
+
+            .battle-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 900px) {
             .json-container {
@@ -1223,6 +1356,14 @@
                         </svg>
                     </span>
                     <span class="nav-label">Universal Clock</span>
+                </a>
+                <a class="nav-item" data-tool="pokemon" title="Pokemon">
+                    <span class="nav-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="9"/><path d="M12 2v8m-7-7l6 6m8-6l-6 6m-2 7v8m-5-3h10"/><circle cx="12" cy="12" r="1.5"/>
+                        </svg>
+                    </span>
+                    <span class="nav-label">Pokemon</span>
                 </a>
             </nav>
 
@@ -1693,6 +1834,51 @@
                     </div>
                 </div>
             </div>
+
+            <!-- POKEMON PANEL -->
+            <div id="panel-pokemon" class="tool-panel">
+                <div class="panel-header">
+                    <h1 class="panel-title"><span class="panel-title-prefix">//</span> Pokemon Battle</h1>
+                    <p class="panel-subtitle">Catch 'em all in turn-based battles</p>
+                </div>
+                <div class="panel-body">
+                    <div class="pokemon-arena" id="pokemonArena" style="display: none;">
+                        <div class="pokemon-card">
+                            <div class="pokemon-card-title">Your Pokemon</div>
+                            <img id="playerSprite" class="pokemon-sprite" src="" alt="Player Pokemon">
+                            <div class="pokemon-name" id="playerName">---</div>
+                            <div class="pokemon-level" id="playerLevel">Lv. --</div>
+                            <div class="hp-bar-container">
+                                <div class="hp-bar" id="playerHpBar" style="width: 100%;"></div>
+                            </div>
+                            <div class="hp-text" id="playerHpText">HP: 100/100</div>
+                        </div>
+
+                        <div class="pokemon-card">
+                            <div class="pokemon-card-title">Enemy Pokemon</div>
+                            <img id="enemySprite" class="pokemon-sprite" src="" alt="Enemy Pokemon">
+                            <div class="pokemon-name" id="enemyName">---</div>
+                            <div class="pokemon-level" id="enemyLevel">Lv. --</div>
+                            <div class="hp-bar-container">
+                                <div class="hp-bar" id="enemyHpBar" style="width: 100%;"></div>
+                            </div>
+                            <div class="hp-text" id="enemyHpText">HP: 100/100</div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 20px;">
+                        <div class="card-title">Battle Log</div>
+                        <textarea id="battleLog" class="battle-log" readonly>Welcome to Pokemon Battle! Click 'New Battle' to start.</textarea>
+                    </div>
+
+                    <div class="battle-actions">
+                        <button id="newBattleBtn" class="btn btn-primary">New Battle</button>
+                        <button id="attackBtn" class="btn btn-success" disabled>Attack</button>
+                        <button id="catchBtn" class="btn btn-warning" disabled>Catch</button>
+                        <button id="runBtn" class="btn btn-danger" disabled>Run</button>
+                    </div>
+                </div>
+            </div>
         </main>
     </div>
 
@@ -1758,6 +1944,7 @@
                 ColorTools.init();
                 WorldTime.init();
                 UniversalClock.init();
+                PokemonGame.init();
             },
 
             switchTool(toolId) {
@@ -2804,6 +2991,168 @@
                     this.updateClock();
                     this.renderCities();
                 }, 1000);
+            }
+        };
+
+        // ===== POKEMON GAME MODULE =====
+        const PokemonGame = {
+            player: null,
+            enemy: null,
+            state: 'idle',
+            pokemonList: [],
+
+            async init() {
+                // Fetch list of all Pokemon for random selection
+                try {
+                    const res = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
+                    const data = await res.json();
+                    this.pokemonList = data.results.map((p, i) => i + 1); // IDs 1-151
+                } catch (e) {
+                    UI.showToast('Failed to load Pokemon data', 'error');
+                    this.pokemonList = Array.from({length: 151}, (_, i) => i + 1);
+                }
+
+                document.getElementById('newBattleBtn').addEventListener('click', () => this.startBattle());
+                document.getElementById('attackBtn').addEventListener('click', () => this.attack());
+                document.getElementById('catchBtn').addEventListener('click', () => this.tryCatch());
+                document.getElementById('runBtn').addEventListener('click', () => this.run());
+            },
+
+            async fetchPokemon(id) {
+                try {
+                    const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+                    const data = await res.json();
+                    return {
+                        id: data.id,
+                        name: data.name,
+                        sprite: data.sprites.front_default || '',
+                        hp: Math.floor(Math.random() * 50) + 50,
+                        maxHp: Math.floor(Math.random() * 50) + 50,
+                        attack: Math.floor(Math.random() * 20) + 15,
+                        defense: Math.floor(Math.random() * 15) + 10,
+                        level: Math.floor(Math.random() * 20) + 5
+                    };
+                } catch (e) {
+                    UI.showToast('Failed to fetch Pokemon', 'error');
+                    return null;
+                }
+            },
+
+            getRandomPokemonId() {
+                return this.pokemonList[Math.floor(Math.random() * this.pokemonList.length)];
+            },
+
+            async startBattle() {
+                this.state = 'battle';
+                document.getElementById('pokemonArena').style.display = 'flex';
+
+                const playerId = this.getRandomPokemonId();
+                const enemyId = this.getRandomPokemonId();
+
+                this.player = await this.fetchPokemon(playerId);
+                this.enemy = await this.fetchPokemon(enemyId);
+
+                if (!this.player || !this.enemy) {
+                    this.log('Failed to load Pokemon!');
+                    return;
+                }
+
+                this.log(`A wild ${this.enemy.name} appeared!`);
+                this.log(`Go, ${this.player.name}!`);
+
+                this.updateUI();
+                document.getElementById('attackBtn').disabled = false;
+                document.getElementById('catchBtn').disabled = false;
+                document.getElementById('runBtn').disabled = false;
+                document.getElementById('newBattleBtn').disabled = true;
+            },
+
+            attack() {
+                if (this.state !== 'battle' || !this.player || !this.enemy) return;
+
+                const damage = Math.floor(Math.random() * 20) + (this.player.attack - this.enemy.defense);
+                this.enemy.hp = Math.max(0, this.enemy.hp - Math.abs(damage));
+
+                this.log(`${this.player.name} used Tackle! Dealt ${Math.abs(damage)} damage.`);
+
+                if (this.enemy.hp <= 0) {
+                    this.log(`${this.enemy.name} fainted! You won!`);
+                    this.endBattle();
+                    return;
+                }
+
+                this.enemyAttack();
+            },
+
+            enemyAttack() {
+                const damage = Math.floor(Math.random() * 15) + (this.enemy.attack - this.player.defense);
+                this.player.hp = Math.max(0, this.player.hp - Math.abs(damage));
+
+                this.log(`${this.enemy.name} used Tackle! Dealt ${Math.abs(damage)} damage.`);
+
+                if (this.player.hp <= 0) {
+                    this.log(`${this.player.name} fainted! You lost!`);
+                    this.endBattle();
+                    return;
+                }
+
+                this.updateUI();
+            },
+
+            tryCatch() {
+                if (this.state !== 'battle' || !this.enemy) return;
+
+                const hpPercent = this.enemy.hp / this.enemy.maxHp;
+                const catchChance = Math.max(0.1, 1 - hpPercent); // Higher chance when enemy is weaker
+
+                if (Math.random() < catchChance) {
+                    this.log(`Got ${this.enemy.name}!`);
+                    this.endBattle();
+                    UI.showToast(`Caught ${this.enemy.name}!`, 'success');
+                } else {
+                    this.log(`${this.enemy.name} broke free!`);
+                    this.enemyAttack();
+                }
+            },
+
+            run() {
+                if (this.state !== 'battle') return;
+                this.log('Ran away from battle!');
+                this.endBattle();
+            },
+
+            endBattle() {
+                this.state = 'idle';
+                document.getElementById('attackBtn').disabled = true;
+                document.getElementById('catchBtn').disabled = true;
+                document.getElementById('runBtn').disabled = true;
+                document.getElementById('newBattleBtn').disabled = false;
+            },
+
+            updateUI() {
+                if (!this.player || !this.enemy) return;
+
+                const playerHpPercent = (this.player.hp / this.player.maxHp) * 100;
+                const enemyHpPercent = (this.enemy.hp / this.enemy.maxHp) * 100;
+
+                document.getElementById('playerName').textContent = this.player.name;
+                document.getElementById('playerLevel').textContent = `Lv. ${this.player.level}`;
+                document.getElementById('playerSprite').src = this.player.sprite;
+                document.getElementById('playerHpBar').style.width = playerHpPercent + '%';
+                document.getElementById('playerHpText').textContent = `HP: ${this.player.hp}/${this.player.maxHp}`;
+
+                document.getElementById('enemyName').textContent = this.enemy.name;
+                document.getElementById('enemyLevel').textContent = `Lv. ${this.enemy.level}`;
+                document.getElementById('enemySprite').src = this.enemy.sprite;
+                document.getElementById('enemyHpBar').style.width = enemyHpPercent + '%';
+                document.getElementById('enemyHpText').textContent = `HP: ${this.enemy.hp}/${this.enemy.maxHp}`;
+            },
+
+            log(message) {
+                const logBox = document.getElementById('battleLog');
+                const timestamp = new Date().toLocaleTimeString();
+                logBox.value += `[${timestamp}] ${message}\n`;
+                logBox.scrollTop = logBox.scrollHeight;
             }
         };
 
