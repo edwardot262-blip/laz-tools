@@ -11,11 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@master
         with:
-          server: criketmail.com
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./
-          server-dir: /home/crikytqu/public_html/
+          host: criketmail.com
+          username: crikytqu
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd public_html
+            git pull origin main
