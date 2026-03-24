@@ -1,14 +1,13 @@
-on:
+name: Deploy to Hosting
+  on:
     push:
       branches:
         - main
-
   jobs:
     deploy:
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v3
-
         - name: Deploy via FTP
           uses: SamKirkland/FTP-Deploy-Action@v4.3.5
           with:
