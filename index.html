@@ -124,6 +124,150 @@
             gap: 40px;
         }
 
+        /* ===== POKEMON GAME STYLES ===== */
+        #pokemon-game {
+            background: linear-gradient(135deg, rgba(92, 122, 78, 0.05) 0%, rgba(160, 113, 74, 0.05) 100%);
+        }
+
+        .game-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--bg-surface);
+            border: 2px solid var(--bg-border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+        }
+
+        .battle-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .pokemon-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--bg-border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+        }
+
+        .pokemon-sprite {
+            font-size: 80px;
+            margin-bottom: 12px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pokemon-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .hp-bar {
+            background: #ddd;
+            border-radius: 8px;
+            height: 20px;
+            margin: 8px 0;
+            overflow: hidden;
+        }
+
+        .hp-fill {
+            background: linear-gradient(90deg, #5c7a4e 0%, #8ba85f 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .hp-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .move-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .move-btn {
+            padding: 12px;
+            background: var(--accent-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+            font-size: 13px;
+        }
+
+        .move-btn:hover:not(:disabled) {
+            background: var(--accent-warm);
+            transform: translateY(-2px);
+        }
+
+        .move-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .battle-log {
+            background: var(--bg-base);
+            border: 1px solid var(--bg-border);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            height: 100px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .battle-log-entry {
+            margin-bottom: 4px;
+        }
+
+        .reset-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent-secondary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .reset-btn:hover {
+            background: var(--accent-warm);
+        }
+
+        .game-status {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--accent-primary);
+            display: none;
+        }
+
+        .game-status.show {
+            display: block;
+        }
+
         nav a {
             font-size: 14px;
             font-weight: 500;
@@ -535,6 +679,7 @@
             <div class="logo">Edward</div>
             <ul>
                 <li><a href="#hero" class="nav-link active">Home</a></li>
+                <li><a href="#pokemon-game" class="nav-link">Pokemon Game</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#skills" class="nav-link">Skills</a></li>
                 <li><a href="#projects" class="nav-link">Projects</a></li>
@@ -555,6 +700,46 @@
                     <a href="#projects" class="btn btn-primary">View My Work</a>
                     <a href="#contact" class="btn btn-secondary">Get In Touch</a>
                 </div>
+            </div>
+        </section>
+
+        <!-- POKEMON GAME SECTION -->
+        <section id="pokemon-game">
+            <h2>🎮 Pokemon Battle Game</h2>
+            <div class="game-container">
+                <div class="battle-area">
+                    <div class="pokemon-card">
+                        <div class="pokemon-sprite" id="opponent-sprite">🐉</div>
+                        <div class="pokemon-name" id="opponent-name">Dragonite</div>
+                        <div class="hp-bar">
+                            <div class="hp-fill" id="opponent-hp" style="width: 100%;"></div>
+                        </div>
+                        <div class="hp-text" id="opponent-hp-text">100/100</div>
+                    </div>
+                    <div class="pokemon-card">
+                        <div class="pokemon-sprite" id="player-sprite">⚡</div>
+                        <div class="pokemon-name" id="player-name">Pikachu</div>
+                        <div class="hp-bar">
+                            <div class="hp-fill" id="player-hp" style="width: 100%;"></div>
+                        </div>
+                        <div class="hp-text" id="player-hp-text">100/100</div>
+                    </div>
+                </div>
+
+                <div class="battle-log" id="battle-log">
+                    <div class="battle-log-entry">Battle started! Choose your move.</div>
+                </div>
+
+                <div class="game-status" id="game-status"></div>
+
+                <div class="move-buttons">
+                    <button class="move-btn" id="move1" onclick="playerAttack(1)">Thunderbolt (25)</button>
+                    <button class="move-btn" id="move2" onclick="playerAttack(2)">Quick Attack (15)</button>
+                    <button class="move-btn" id="move3" onclick="playerAttack(3)">Thunder Wave (10)</button>
+                    <button class="move-btn" id="move4" onclick="playerAttack(4)">Iron Tail (20)</button>
+                </div>
+
+                <button class="reset-btn" onclick="resetGame()">Reset Game</button>
             </div>
         </section>
 
@@ -684,6 +869,120 @@
     </footer>
 
     <script>
+        // ===== POKEMON GAME LOGIC =====
+        let gameState = {
+            player: {
+                name: 'Pikachu',
+                sprite: '⚡',
+                maxHp: 100,
+                currentHp: 100
+            },
+            opponent: {
+                name: 'Dragonite',
+                sprite: '🐉',
+                maxHp: 100,
+                currentHp: 100
+            },
+            gameActive: true,
+            battleLog: []
+        };
+
+        const moves = {
+            1: { name: 'Thunderbolt', damage: 25 },
+            2: { name: 'Quick Attack', damage: 15 },
+            3: { name: 'Thunder Wave', damage: 10 },
+            4: { name: 'Iron Tail', damage: 20 }
+        };
+
+        function updateUI() {
+            const playerHpPercent = (gameState.player.currentHp / gameState.player.maxHp) * 100;
+            const opponentHpPercent = (gameState.opponent.currentHp / gameState.opponent.maxHp) * 100;
+
+            document.getElementById('player-hp').style.width = playerHpPercent + '%';
+            document.getElementById('player-hp-text').textContent = gameState.player.currentHp + '/' + gameState.player.maxHp;
+
+            document.getElementById('opponent-hp').style.width = opponentHpPercent + '%';
+            document.getElementById('opponent-hp-text').textContent = gameState.opponent.currentHp + '/' + gameState.opponent.maxHp;
+
+            updateBattleLog();
+        }
+
+        function addLog(text) {
+            gameState.battleLog.push(text);
+            if (gameState.battleLog.length > 5) {
+                gameState.battleLog.shift();
+            }
+        }
+
+        function updateBattleLog() {
+            const logElement = document.getElementById('battle-log');
+            logElement.innerHTML = gameState.battleLog.map(log => `<div class="battle-log-entry">${log}</div>`).join('');
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+
+        function playerAttack(moveNum) {
+            if (!gameState.gameActive) return;
+
+            const move = moves[moveNum];
+            const damage = move.damage + Math.floor(Math.random() * 10);
+
+            gameState.opponent.currentHp = Math.max(0, gameState.opponent.currentHp - damage);
+            addLog(`🎯 Pikachu used ${move.name}! Dealt ${damage} damage!`);
+
+            updateUI();
+
+            if (gameState.opponent.currentHp <= 0) {
+                endGame('You won! 🎉');
+                return;
+            }
+
+            disableMoves(true);
+            setTimeout(opponentAttack, 1500);
+        }
+
+        function opponentAttack() {
+            const moveNum = Math.floor(Math.random() * 4) + 1;
+            const move = moves[moveNum];
+            const damage = move.damage + Math.floor(Math.random() * 10);
+
+            gameState.player.currentHp = Math.max(0, gameState.player.currentHp - damage);
+            addLog(`🔥 Dragonite used ${move.name}! Dealt ${damage} damage!`);
+
+            updateUI();
+
+            if (gameState.player.currentHp <= 0) {
+                endGame('You lost! 💔');
+                return;
+            }
+
+            disableMoves(false);
+        }
+
+        function disableMoves(disabled) {
+            document.querySelectorAll('.move-btn').forEach(btn => {
+                btn.disabled = disabled;
+            });
+        }
+
+        function endGame(message) {
+            gameState.gameActive = false;
+            document.getElementById('game-status').textContent = message;
+            document.getElementById('game-status').classList.add('show');
+            disableMoves(true);
+        }
+
+        function resetGame() {
+            gameState = {
+                player: { name: 'Pikachu', sprite: '⚡', maxHp: 100, currentHp: 100 },
+                opponent: { name: 'Dragonite', sprite: '🐉', maxHp: 100, currentHp: 100 },
+                gameActive: true,
+                battleLog: ['Battle started! Choose your move.']
+            };
+            document.getElementById('game-status').classList.remove('show');
+            disableMoves(false);
+            updateUI();
+        }
+
         // ===== SMOOTH NAV ACTIVE STATE =====
         const navLinks = document.querySelectorAll('.nav-link');
         const sections = document.querySelectorAll('section');
