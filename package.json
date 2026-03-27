@@ -1,0 +1,27 @@
+{
+  "name": "intune-onboarding-server",
+  "version": "1.0.0",
+  "description": "HTTP server for Intune device onboarding portal and script distribution",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo \"No tests configured\""
+  },
+  "keywords": [
+    "intune",
+    "onboarding",
+    "microsoft365",
+    "azure-ad",
+    "provisioning"
+  ],
+  "author": "IT Department",
+  "license": "Proprietary",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "internal"
+  }
+}

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Device Onboarding</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .status-box {
+            background: #f0f7ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 5px;
+        }
+
+        .status-box h3 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .status-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .icon-pending {
+            background-color: #ffc107;
+        }
+
+        .icon-check {
+            background-color: #28a745;
+        }
+
+        .instructions {
+            margin-bottom: 30px;
+        }
+
+        .instructions h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .step {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .step:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            background: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 28px;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 14px;
+        }
+
+        .step-content {
+            display: inline-block;
+            vertical-align: top;
+            width: calc(100% - 50px);
+        }
+
+        .step-title {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .step-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .download-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .download-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e9ecef;
+            color: #333;
+            border: 1px solid #dee2e6;
+        }
+
+        .btn-secondary:hover {
+            background: #dee2e6;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #1565c0;
+            line-height: 1.5;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #856404;
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .check-status {
+            margin-top: 20px;
+        }
+
+        .status-check-btn {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .status-check-btn:hover {
+            background: #5a6268;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100" height="100" rx="15" fill="#667eea"/>
+                <circle cx="50" cy="50" r="35" fill="white" opacity="0.9"/>
+                <path d="M 35 45 L 45 55 L 65 35" stroke="#667eea" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <h1>Device Onboarding</h1>
+            <p class="subtitle">Set up your Microsoft 365 workspace</p>
+        </div>
+
+        <div class="status-box">
+            <h3>📋 Setup Checklist</h3>
+            <div class="status-item">
+                <span class="status-icon icon-check">✓</span>
+                <span>Azure AD Enrollment (will verify)</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon icon-pending">→</span>
+                <span>Intune Device Sync</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon icon-pending">→</span>
+                <span>Microsoft Office Apps</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon icon-pending">→</span>
+                <span>OneDrive Configuration</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon icon-pending">→</span>
+                <span>Outlook Setup</span>
+            </div>
+            <div class="status-item">
+                <span class="status-icon icon-pending">→</span>
+                <span>Microsoft Teams</span>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>🚀 Getting Started</h3>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <div class="step-title">Download the Setup Script</div>
+                    <div class="step-description">Click the download button below to get the onboarding script to your computer.</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <div class="step-title">Run as Administrator</div>
+                    <div class="step-description">Right-click the downloaded file and select "Run as Administrator". This is required for device setup.</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <div class="step-title">Follow the Setup Process</div>
+                    <div class="step-description">The script will automatically configure all your Microsoft 365 services. This may take a few minutes.</div>
+                </div>
+            </div>
+
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <div class="step-title">Restart Your Device</div>
+                    <div class="step-description">After setup completes, restart your computer for all changes to take effect.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-section">
+            <h3>📥 Download Setup Files</h3>
+            <div class="button-group">
+                <a href="Intune-Onboarding-Launcher.bat" class="btn btn-primary" download>
+                    <span>⬇</span>
+                    <span>Download Launcher</span>
+                </a>
+                <a href="Intune-Onboarding.ps1" class="btn btn-secondary" download>
+                    <span>⬇</span>
+                    <span>Download Script</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ Important:</strong> You must have administrator access and be connected to the company network. Your device must already be enrolled with Intune. If you encounter issues, contact IT support.
+        </div>
+
+        <div class="info-box">
+            <strong>ℹ️ Note:</strong> The setup process will sync your device with Intune, install Microsoft 365 apps, and configure OneDrive, Outlook, and Teams. A detailed log of all actions will be saved to <code>C:\ProgramData\Intune-Onboarding\</code>
+        </div>
+
+        <div class="footer">
+            <p>Company Device Onboarding System v1.0</p>
+            <p>For support, contact IT at itsupport@company.com</p>
+        </div>
+    </div>
+
+    <script>
+        // Optional: Add client-side status checking
+        function checkAzureADStatus() {
+            // This would require WMI access - typically done server-side
+            console.log("Status check would require elevated privileges");
+        }
+    </script>
+</body>
+</html>
