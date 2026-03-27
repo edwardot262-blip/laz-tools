@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(git pull:*)",
+      "Bash(git commit -m \"Deploy Intune onboarding system to website - create onboarding directory and add cPanel deployment guide:*)"
+    ]
+  }
+}
