@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edward - Desktop Engineer → AI Developer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>LAZ Tools - Digital Playground</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ===== RESET ===== */
         * {
             margin: 0;
             padding: 0;
@@ -40,24 +39,20 @@
             z-index: -1;
         }
 
-        /* ===== CSS VARIABLES ===== */
         :root {
             --bg-base: #0a0e27;
             --bg-surface: #111a3a;
             --bg-elevated: #1a2451;
             --bg-border: #2d3e6f;
-
             --accent-primary: #ff6b00;
             --accent-secondary: #ff8c00;
             --accent-warm: #ffa500;
             --accent-light: #ffb84d;
             --accent-glow: #ff4500;
             --accent-cyan: #00d4ff;
-
             --text-primary: #e8eef5;
             --text-secondary: #a0a8b8;
             --text-muted: #6b738a;
-
             --radius-md: 8px;
             --radius-lg: 12px;
             --transition: 0.3s ease;
@@ -65,46 +60,6 @@
             --glow-strong: 0 0 30px rgba(255, 107, 0, 0.6);
         }
 
-        /* ===== TYPOGRAPHY ===== */
-        h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 700;
-        }
-
-        h1 {
-            font-size: 56px;
-            line-height: 1.1;
-            color: var(--text-primary);
-        }
-
-        h2 {
-            font-size: 42px;
-            color: var(--text-primary);
-            margin-bottom: 32px;
-        }
-
-        h3 {
-            font-size: 24px;
-            color: var(--text-primary);
-            margin-bottom: 16px;
-        }
-
-        p {
-            color: var(--text-secondary);
-            margin-bottom: 16px;
-        }
-
-        a {
-            color: var(--accent-primary);
-            text-decoration: none;
-            transition: color var(--transition);
-        }
-
-        a:hover {
-            color: var(--accent-warm);
-        }
-
-        /* ===== HEADER & NAV ===== */
         header {
             position: fixed;
             top: 0;
@@ -115,27 +70,27 @@
             border-bottom: 2px solid var(--accent-primary);
             box-shadow: 0 0 20px rgba(255, 107, 0, 0.15);
             z-index: 1000;
-            padding: 16px 0;
+            padding: 20px 40px;
             transition: all 0.3s ease;
         }
 
         header.scrolled {
-            padding: 8px 0;
+            padding: 12px 40px;
             box-shadow: 0 0 30px rgba(255, 107, 0, 0.25);
         }
 
         nav {
-            max-width: 1100px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 60px;
         }
 
         .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 24px;
+            font-family: 'Space Mono', monospace;
+            font-size: 28px;
             font-weight: 700;
             color: var(--accent-primary);
             text-shadow: 0 0 20px rgba(255, 107, 0, 0.6);
@@ -145,319 +100,67 @@
 
         .logo:hover {
             text-shadow: 0 0 30px rgba(255, 107, 0, 0.8);
+            transform: scale(1.05);
         }
 
         nav ul {
             list-style: none;
             display: flex;
-            gap: 40px;
-        }
-
-        /* ===== POKEMON GAME STYLES ===== */
-        #pokemon-game {
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.08) 0%, rgba(0, 212, 255, 0.05) 100%);
-        }
-
-        .game-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-elevated) 100%);
-            border: 2px solid var(--accent-primary);
-            border-radius: var(--radius-lg);
-            padding: 32px;
-            box-shadow: 0 0 30px rgba(255, 107, 0, 0.2);
-        }
-
-        .battle-area {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-
-        .pokemon-card {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(255, 107, 0, 0.05));
-            border: 2px solid var(--bg-border);
-            border-radius: var(--radius-md);
-            padding: 16px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .pokemon-card:hover {
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
-        }
-
-        .pokemon-sprite {
-            font-size: 80px;
-            margin-bottom: 12px;
-            height: 100px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .pokemon-name {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-
-        .hp-bar {
-            background: var(--bg-border);
-            border-radius: 8px;
-            height: 20px;
-            margin: 8px 0;
-            overflow: hidden;
-            border: 1px solid rgba(255, 107, 0, 0.3);
-        }
-
-        .hp-fill {
-            background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-warm) 100%);
-            height: 100%;
-            transition: width 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: white;
-            font-weight: 600;
-            box-shadow: 0 0 10px rgba(255, 107, 0, 0.6);
-        }
-
-        .hp-text {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        .move-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .move-btn {
-            padding: 12px;
-            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-            color: white;
-            border: 2px solid var(--accent-primary);
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 13px;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .move-btn:hover:not(:disabled) {
-            box-shadow: 0 0 20px rgba(255, 107, 0, 0.6);
-            transform: translateY(-2px) scale(1.05);
-            border-color: var(--accent-warm);
-        }
-
-        .move-btn:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .battle-log {
-            background: linear-gradient(135deg, rgba(10, 14, 39, 0.5), rgba(255, 107, 0, 0.03));
-            border: 2px solid var(--bg-border);
-            border-radius: var(--radius-md);
-            padding: 12px;
-            height: 100px;
-            overflow-y: auto;
-            margin-bottom: 16px;
-            font-size: 13px;
-            color: var(--text-secondary);
-            box-shadow: inset 0 0 15px rgba(255, 107, 0, 0.05);
-        }
-
-        .battle-log-entry {
-            margin-bottom: 4px;
-        }
-
-        .reset-btn {
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(135deg, var(--accent-glow) 0%, var(--accent-secondary) 100%);
-            color: white;
-            border: 2px solid var(--accent-primary);
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .reset-btn:hover {
-            box-shadow: 0 0 25px rgba(255, 107, 0, 0.7);
-            transform: scale(1.02);
-            border-color: var(--accent-warm);
-        }
-
-        .game-status {
-            text-align: center;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: var(--accent-primary);
-            display: none;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px rgba(255, 107, 0, 0.6);
-        }
-
-        .game-status.show {
-            display: block;
-            animation: pulse 0.6s ease-in-out;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            gap: 30px;
         }
 
         nav a {
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
             color: var(--text-secondary);
-            transition: color var(--transition);
-        }
-
-        nav a.active {
-            color: var(--accent-primary);
-            border-bottom: 2px solid var(--accent-primary);
-            padding-bottom: 4px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         nav a:hover {
             color: var(--accent-primary);
+            text-shadow: 0 0 10px rgba(255, 107, 0, 0.4);
         }
 
-        /* ===== MAIN CONTENT ===== */
         main {
-            margin-top: 80px;
+            margin-top: 100px;
+            padding: 40px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        section {
-            padding: 120px 40px;
-            max-width: 1100px;
-            margin: 0 auto;
+        .hero {
+            text-align: center;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.1) 0%, rgba(0, 212, 255, 0.05) 100%);
+            border-radius: var(--radius-lg);
+            border: 2px solid var(--accent-primary);
+            margin-bottom: 60px;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.15);
         }
 
-        /* ===== HERO ===== */
-        #hero {
-            padding: 140px 40px 120px;
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.08) 0%, rgba(0, 212, 255, 0.05) 100%);
-            position: relative;
-            overflow: hidden;
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
         }
 
-        #hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(255, 107, 0, 0.1) 0%, transparent 70%);
-            animation: float 20s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            50% { transform: translate(30px, -30px) rotate(180deg); }
-        }
-
-        #hero > * {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-content h1 {
-            margin-bottom: 16px;
-        }
-
-        .hero-subtitle {
-            font-size: 20px;
+        .hero p {
+            font-size: 18px;
             color: var(--text-secondary);
-            margin-bottom: 32px;
-            max-width: 600px;
         }
 
-        .hero-cta {
-            display: flex;
-            gap: 16px;
-            margin-top: 40px;
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
         }
 
-        /* ===== BUTTONS ===== */
-        .btn {
-            padding: 12px 32px;
-            border: none;
-            border-radius: var(--radius-md);
-            font-family: 'Inter', system-ui, sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all var(--transition);
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
-            color: #fff;
-            border: 2px solid var(--accent-primary);
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 1px;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .btn-primary:hover {
-            box-shadow: 0 0 20px rgba(255, 107, 0, 0.6), inset 0 0 20px rgba(255, 107, 0, 0.2);
-            transform: translateY(-2px);
-            border-color: var(--accent-warm);
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--accent-primary);
-            border: 2px solid var(--accent-primary);
-            position: relative;
-            letter-spacing: 1px;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255, 107, 0, 0.1);
-            box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
-            border-color: var(--accent-warm);
-            color: var(--accent-warm);
-        }
-
-        /* ===== CARDS ===== */
-        .card {
+        .tool-card {
             background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-elevated) 100%);
             border: 2px solid var(--bg-border);
             border-radius: var(--radius-lg);
@@ -465,9 +168,10 @@
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
 
-        .card::before {
+        .tool-card::before {
             content: '';
             position: absolute;
             top: 0;
@@ -480,605 +184,484 @@
             pointer-events: none;
         }
 
-        .card:hover {
+        .tool-card:hover {
             border-color: var(--accent-primary);
             box-shadow: var(--glow), inset 0 0 20px rgba(255, 107, 0, 0.1);
             transform: translateY(-4px) scale(1.02);
         }
 
-        .card:hover::before {
+        .tool-card:hover::before {
             opacity: 1;
         }
 
-        /* ===== ABOUT SECTION ===== */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
+        .tool-icon {
+            font-size: 40px;
+            margin-bottom: 12px;
         }
 
-        .about-content h3 {
+        .tool-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
             color: var(--accent-primary);
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            text-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
+            text-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
         }
 
-        .about-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(0, 212, 255, 0.1));
-            color: var(--accent-primary);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 24px;
-            border: 1px solid rgba(255, 107, 0, 0.3);
-            box-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
+        .tool-card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
         }
 
-        .about-image {
+        .tool-input {
             width: 100%;
-            height: 400px;
-            background: linear-gradient(135deg, var(--bg-elevated) 0%, rgba(255, 107, 0, 0.05) 100%);
-            border-radius: var(--radius-lg);
-            border: 2px solid var(--accent-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 14px;
-            box-shadow: inset 0 0 30px rgba(255, 107, 0, 0.1);
-            position: relative;
-        }
-
-        .about-image::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(255, 107, 0, 0.03),
-                rgba(255, 107, 0, 0.03) 2px,
-                transparent 2px,
-                transparent 4px
-            );
-            border-radius: var(--radius-lg);
-            pointer-events: none;
-        }
-
-        /* ===== SKILLS SECTION ===== */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-        }
-
-        .skill-group h3 {
-            font-size: 20px;
-            margin-bottom: 24px;
-            color: var(--accent-primary);
-            text-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
-        }
-
-        .skill-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .skill-badge {
-            background: linear-gradient(135deg, var(--bg-surface), var(--bg-elevated));
+            background: var(--bg-base);
             border: 2px solid var(--bg-border);
-            padding: 8px 16px;
-            border-radius: 20px;
+            color: var(--text-primary);
+            padding: 10px 12px;
+            border-radius: var(--radius-md);
+            margin-bottom: 10px;
+            font-family: 'Space Mono', monospace;
             font-size: 13px;
-            color: var(--text-secondary);
             transition: all 0.3s ease;
-            position: relative;
         }
 
-        .skill-badge:hover {
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), var(--bg-elevated));
+        .tool-input:focus {
+            outline: none;
             border-color: var(--accent-primary);
-            color: var(--accent-primary);
             box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
-            transform: scale(1.1);
         }
 
-        /* ===== PROJECTS SECTION ===== */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
-        }
-
-        .project-card {
-            background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-elevated) 100%);
-            border: 2px solid var(--bg-border);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .project-card::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(255, 107, 0, 0.3) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-        }
-
-        .project-card:hover {
-            border-color: var(--accent-primary);
-            box-shadow: var(--glow), inset 0 0 20px rgba(255, 107, 0, 0.1);
-            transform: translateY(-4px) scale(1.02);
-        }
-
-        .project-card:hover::after {
-            opacity: 1;
-        }
-
-        .project-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-        }
-
-        .project-desc {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 16px;
-            flex-grow: 1;
-        }
-
-        .project-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .tag {
-            background: rgba(255, 107, 0, 0.15);
+        .tool-output {
+            background: rgba(0, 212, 255, 0.05);
+            border: 2px solid var(--accent-cyan);
             color: var(--accent-cyan);
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .project-link {
-            color: var(--accent-primary);
-            font-weight: 600;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            font-family: 'Space Mono', monospace;
             font-size: 13px;
-        }
-
-        .coming-soon {
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.05), rgba(0, 212, 255, 0.05));
-            border-style: dashed;
-            border-color: var(--bg-border);
+            word-break: break-all;
+            min-height: 40px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            min-height: 300px;
-            text-align: center;
         }
 
-        /* ===== ARTICLES SECTION ===== */
-        .articles-list {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .article-card {
-            background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-elevated) 100%);
-            border: 2px solid var(--bg-border);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .article-card::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 3px;
-            background: linear-gradient(180deg, var(--accent-primary), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .article-card:hover {
-            border-color: var(--accent-primary);
-            box-shadow: var(--glow), inset 0 0 20px rgba(255, 107, 0, 0.1);
-            transform: translateX(4px);
-        }
-
-        .article-card:hover::before {
-            opacity: 1;
-        }
-
-        .article-date {
-            color: var(--text-muted);
-            font-size: 12px;
+        .btn {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+            color: white;
+            border: 2px solid var(--accent-primary);
+            border-radius: var(--radius-md);
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
-
-        .article-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-        }
-
-        .article-excerpt {
-            color: var(--text-secondary);
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
-
-        .read-more {
-            color: var(--accent-primary);
-            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
             font-size: 13px;
-        }
-
-        /* ===== CONTACT SECTION ===== */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .social-card {
-            background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-elevated) 100%);
-            border: 2px solid var(--bg-border);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            text-align: center;
-            transition: all 0.4s ease;
-            position: relative;
-        }
-
-        .social-card:hover {
-            border-color: var(--accent-primary);
-            background: linear-gradient(135deg, rgba(255, 107, 0, 0.1) 0%, var(--bg-elevated) 100%);
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: var(--glow);
-        }
-
-        .social-icon {
-            font-size: 32px;
-            margin-bottom: 12px;
-        }
-
-        .social-label {
-            color: var(--text-secondary);
-            font-size: 12px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
-            margin-bottom: 8px;
+            width: 100%;
         }
 
-        .social-handle {
+        .btn:hover {
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.6);
+            transform: translateY(-2px);
+            border-color: var(--accent-warm);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: transparent;
             color: var(--accent-primary);
-            font-weight: 600;
-            font-size: 14px;
         }
 
-        /* ===== FOOTER ===== */
+        .btn-secondary:hover {
+            background: rgba(255, 107, 0, 0.1);
+            box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
+        }
+
+        .section-title {
+            font-size: 32px;
+            margin-bottom: 30px;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+        }
+
         footer {
-            background: linear-gradient(180deg, var(--bg-elevated) 0%, rgba(10, 14, 39, 0.5) 100%);
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
             border-top: 2px solid var(--accent-primary);
             box-shadow: 0 0 30px rgba(255, 107, 0, 0.1);
-            padding: 40px;
-            text-align: center;
-            color: var(--text-secondary);
+            margin-top: 60px;
         }
 
-        /* ===== RESPONSIVE ===== */
+        .mini-game {
+            background: linear-gradient(135deg, var(--bg-surface) 0%, var(--bg-elevated) 100%);
+            border: 2px solid var(--accent-primary);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.2);
+            margin-bottom: 40px;
+        }
+
+        .timer-display {
+            font-family: 'Space Mono', monospace;
+            font-size: 48px;
+            color: var(--accent-cyan);
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.6);
+        }
+
+        .color-preview {
+            width: 100%;
+            height: 80px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--accent-primary);
+            margin: 15px 0;
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+
         @media (max-width: 768px) {
-            h1 {
-                font-size: 36px;
-            }
-
-            h2 {
-                font-size: 28px;
-            }
-
-            nav ul {
+            nav {
+                flex-direction: column;
                 gap: 20px;
             }
 
-            nav a {
-                font-size: 12px;
-            }
-
-            section {
-                padding: 80px 24px;
-            }
-
-            #hero {
-                padding: 100px 24px 80px;
-            }
-
-            .about-grid,
-            .skills-grid {
-                grid-template-columns: 1fr;
-                gap: 40px;
-            }
-
-            .hero-cta {
+            nav ul {
                 flex-direction: column;
-                width: 100%;
-            }
-
-            .btn {
-                width: 100%;
+                gap: 15px;
                 text-align: center;
             }
-        }
 
-        /* ===== SCROLLBAR ===== */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
 
-        ::-webkit-scrollbar-track {
-            background: var(--bg-base);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, var(--accent-primary), var(--accent-secondary));
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(255, 107, 0, 0.4);
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, var(--accent-warm), var(--accent-primary));
-            box-shadow: 0 0 15px rgba(255, 107, 0, 0.6);
+            main {
+                padding: 20px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- HEADER & NAV -->
+    <!-- HEADER -->
     <header id="header">
         <nav>
-            <div class="logo">Edward</div>
+            <div class="logo">⚡ LAZ TOOLS ⚡</div>
             <ul>
-                <li><a href="#hero" class="nav-link active">Home</a></li>
-                <li><a href="#pokemon-game" class="nav-link">Pokemon Game</a></li>
-                <li><a href="#about" class="nav-link">About</a></li>
-                <li><a href="#skills" class="nav-link">Skills</a></li>
-                <li><a href="#projects" class="nav-link">Projects</a></li>
-                <li><a href="#articles" class="nav-link">Articles</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
-                <li><a href="onboarding/" class="nav-link" target="_blank">Onboarding</a></li>
+                <li><a href="#tools">Tools</a></li>
+                <li><a href="#games">Games</a></li>
+                <li><a href="#utilities">Utilities</a></li>
             </ul>
         </nav>
     </header>
 
     <!-- MAIN CONTENT -->
     <main>
-        <!-- HERO SECTION -->
-        <section id="hero">
-            <div class="hero-content">
-                <h1>Desktop Engineer<br>Shifting to AI</h1>
-                <p class="hero-subtitle">Building intelligent systems, exploring machine learning, and sharing my journey from traditional engineering to AI development.</p>
-                <div class="hero-cta">
-                    <a href="#projects" class="btn btn-primary">View My Work</a>
-                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+        <!-- HERO -->
+        <div class="hero">
+            <h1>Welcome to LAZ Tools</h1>
+            <p>Your personal digital playground for work, fun, and productivity ✨</p>
+        </div>
+
+        <!-- TEXT TOOLS -->
+        <h2 class="section-title" id="tools">🔧 Text Tools</h2>
+        <div class="tools-grid">
+            <!-- Word Counter -->
+            <div class="tool-card">
+                <div class="tool-icon">📊</div>
+                <h3>Word Counter</h3>
+                <p>Count words, characters, and lines</p>
+                <textarea class="tool-input" id="wordInput" placeholder="Paste your text here..." rows="4"></textarea>
+                <div class="tool-output" id="wordOutput">0 words • 0 chars</div>
+            </div>
+
+            <!-- Text Case Converter -->
+            <div class="tool-card">
+                <div class="tool-icon">🔤</div>
+                <h3>Case Converter</h3>
+                <p>Convert text to different cases</p>
+                <textarea class="tool-input" id="caseInput" placeholder="Enter text..." rows="4"></textarea>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px;">
+                    <button class="btn" onclick="convertCase('upper')">UPPER</button>
+                    <button class="btn" onclick="convertCase('lower')">lower</button>
+                </div>
+                <div class="tool-output" id="caseOutput">Converted text here</div>
+            </div>
+
+            <!-- Text Reverser -->
+            <div class="tool-card">
+                <div class="tool-icon">🔄</div>
+                <h3>Text Reverser</h3>
+                <p>Reverse your text instantly</p>
+                <textarea class="tool-input" id="reverseInput" placeholder="Enter text..." rows="4"></textarea>
+                <button class="btn" style="margin-bottom: 10px;" onclick="reverseText()">Reverse</button>
+                <div class="tool-output" id="reverseOutput">Reversed text</div>
+            </div>
+
+            <!-- Password Generator -->
+            <div class="tool-card">
+                <div class="tool-icon">🔐</div>
+                <h3>Password Generator</h3>
+                <p>Generate secure random passwords</p>
+                <input type="number" class="tool-input" id="passLength" min="8" max="32" value="16" placeholder="Length">
+                <button class="btn" style="margin-bottom: 10px;" onclick="generatePassword()">Generate</button>
+                <div class="tool-output" id="passOutput">Click generate</div>
+            </div>
+
+            <!-- Color Generator -->
+            <div class="tool-card">
+                <div class="tool-icon">🎨</div>
+                <h3>Color Generator</h3>
+                <p>Generate random colors</p>
+                <button class="btn" style="margin-bottom: 10px;" onclick="generateColor()">New Color</button>
+                <div class="color-preview" id="colorPreview"></div>
+                <div class="tool-output" id="colorOutput">#FF6B00</div>
+            </div>
+
+            <!-- JSON Formatter -->
+            <div class="tool-card">
+                <div class="tool-icon">{ }</div>
+                <h3>JSON Formatter</h3>
+                <p>Format and validate JSON</p>
+                <textarea class="tool-input" id="jsonInput" placeholder="Paste JSON..." rows="4"></textarea>
+                <button class="btn" style="margin-bottom: 10px;" onclick="formatJSON()">Format</button>
+                <div class="tool-output" id="jsonOutput">Formatted JSON</div>
+            </div>
+        </div>
+
+        <!-- UTILITIES -->
+        <h2 class="section-title" id="utilities">⚙️ Utilities</h2>
+        <div class="tools-grid">
+            <!-- Timer -->
+            <div class="mini-game">
+                <div class="tool-icon" style="font-size: 32px; text-align: center;">⏱️</div>
+                <h3 style="text-align: center;">Quick Timer</h3>
+                <input type="number" class="tool-input" id="timerInput" min="1" max="3600" value="5" placeholder="Seconds">
+                <div class="timer-display" id="timerDisplay">00:00</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button class="btn" onclick="startTimer()">Start</button>
+                    <button class="btn btn-secondary" onclick="resetTimer()">Reset</button>
                 </div>
             </div>
-        </section>
 
-        <!-- POKEMON GAME SECTION -->
-        <section id="pokemon-game">
-            <h2>🎮 Pokemon Battle Game</h2>
-            <div class="game-container">
-                <div class="battle-area">
-                    <div class="pokemon-card">
-                        <div class="pokemon-sprite" id="opponent-sprite">🐉</div>
-                        <div class="pokemon-name" id="opponent-name">Dragonite</div>
-                        <div class="hp-bar">
-                            <div class="hp-fill" id="opponent-hp" style="width: 100%;"></div>
+            <!-- Simple Calculator -->
+            <div class="mini-game">
+                <div class="tool-icon" style="font-size: 32px; text-align: center;">🧮</div>
+                <h3 style="text-align: center;">Calculator</h3>
+                <input type="number" class="tool-input" id="num1" placeholder="First number">
+                <input type="number" class="tool-input" id="num2" placeholder="Second number">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px;">
+                    <button class="btn" onclick="calculate('+')">+</button>
+                    <button class="btn" onclick="calculate('-')">−</button>
+                    <button class="btn" onclick="calculate('*')">×</button>
+                    <button class="btn" onclick="calculate('/')">÷</button>
+                </div>
+                <div class="tool-output" style="margin-top: 15px;" id="calcOutput">Result</div>
+            </div>
+
+            <!-- Quote Generator -->
+            <div class="mini-game">
+                <div class="tool-icon" style="font-size: 32px; text-align: center;">💭</div>
+                <h3 style="text-align: center;">Random Quote</h3>
+                <button class="btn" style="margin-bottom: 15px;" onclick="generateQuote()">Get Quote</button>
+                <div class="tool-output" id="quoteOutput" style="min-height: 80px; text-align: center; font-style: italic;">Click to get a quote</div>
+            </div>
+        </div>
+
+        <!-- GAMES -->
+        <h2 class="section-title" id="games">🎮 Games & Fun</h2>
+        <div class="tools-grid">
+            <!-- Pokemon Game -->
+            <div class="mini-game" style="grid-column: 1 / -1;">
+                <h3 style="text-align: center; margin-bottom: 20px;">🎮 Pokemon Battle Game</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 600px; margin: 0 auto;">
+                    <div style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(255, 107, 0, 0.05)); border: 2px solid var(--bg-border); border-radius: var(--radius-md); padding: 16px; text-align: center; transition: all 0.3s; hover: {border-color: var(--accent-primary);}">
+                        <div style="font-size: 60px; margin-bottom: 10px;" id="opponent-sprite">🐉</div>
+                        <div style="font-weight: 600; margin-bottom: 8px;" id="opponent-name">Dragonite</div>
+                        <div style="background: var(--bg-border); border-radius: 8px; height: 20px; margin: 8px 0; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-warm) 100%); height: 100%; width: 100%; box-shadow: 0 0 10px rgba(255, 107, 0, 0.6);" id="opponent-hp"></div>
                         </div>
-                        <div class="hp-text" id="opponent-hp-text">100/100</div>
+                        <div style="font-size: 12px; color: var(--text-muted);" id="opponent-hp-text">100/100</div>
                     </div>
-                    <div class="pokemon-card">
-                        <div class="pokemon-sprite" id="player-sprite">⚡</div>
-                        <div class="pokemon-name" id="player-name">Pikachu</div>
-                        <div class="hp-bar">
-                            <div class="hp-fill" id="player-hp" style="width: 100%;"></div>
+
+                    <div style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(255, 107, 0, 0.05)); border: 2px solid var(--bg-border); border-radius: var(--radius-md); padding: 16px; text-align: center;">
+                        <div style="font-size: 60px; margin-bottom: 10px;" id="player-sprite">⚡</div>
+                        <div style="font-weight: 600; margin-bottom: 8px;" id="player-name">Pikachu</div>
+                        <div style="background: var(--bg-border); border-radius: 8px; height: 20px; margin: 8px 0; overflow: hidden;">
+                            <div style="background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-warm) 100%); height: 100%; width: 100%; box-shadow: 0 0 10px rgba(255, 107, 0, 0.6);" id="player-hp"></div>
                         </div>
-                        <div class="hp-text" id="player-hp-text">100/100</div>
+                        <div style="font-size: 12px; color: var(--text-muted);" id="player-hp-text">100/100</div>
                     </div>
                 </div>
 
-                <div class="battle-log" id="battle-log">
-                    <div class="battle-log-entry">Battle started! Choose your move.</div>
+                <div style="background: linear-gradient(135deg, rgba(10, 14, 39, 0.5), rgba(255, 107, 0, 0.03)); border: 2px solid var(--bg-border); border-radius: var(--radius-md); padding: 12px; height: 80px; overflow-y: auto; margin: 20px auto; max-width: 600px; font-size: 12px; color: var(--text-secondary);" id="battle-log">
+                    <div>Battle started! Choose your move.</div>
                 </div>
 
-                <div class="game-status" id="game-status"></div>
+                <div style="text-align: center; font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--accent-primary); display: none; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 20px rgba(255, 107, 0, 0.6);" id="game-status"></div>
 
-                <div class="move-buttons">
-                    <button class="move-btn" id="move1" onclick="playerAttack(1)">Thunderbolt (25)</button>
-                    <button class="move-btn" id="move2" onclick="playerAttack(2)">Quick Attack (15)</button>
-                    <button class="move-btn" id="move3" onclick="playerAttack(3)">Thunder Wave (10)</button>
-                    <button class="move-btn" id="move4" onclick="playerAttack(4)">Iron Tail (20)</button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 600px; margin: 0 auto; margin-bottom: 15px;">
+                    <button class="btn" onclick="playerAttack(1)">THUNDERBOLT</button>
+                    <button class="btn" onclick="playerAttack(2)">QUICK ATTACK</button>
+                    <button class="btn" onclick="playerAttack(3)">THUNDER WAVE</button>
+                    <button class="btn" onclick="playerAttack(4)">IRON TAIL</button>
                 </div>
 
-                <button class="reset-btn" onclick="resetGame()">Reset Game</button>
+                <button class="btn btn-secondary" style="max-width: 600px; margin: 0 auto; display: block;" onclick="resetGame()">Reset Game</button>
             </div>
-        </section>
-
-        <!-- ABOUT SECTION -->
-        <section id="about">
-            <h2>About Me</h2>
-            <div class="about-grid">
-                <div class="about-content">
-                    <h3>Background</h3>
-                    <p>I started my career as a desktop engineer, building robust systems and solving complex infrastructure challenges. After several years in the field, I discovered my passion for AI and machine learning.</p>
-                    <p>Now I'm actively transitioning into AI development, learning modern ML frameworks, neural networks, and building projects that combine my engineering background with cutting-edge AI technologies.</p>
-                    <span class="about-badge">🚀 Currently Learning: PyTorch, LLMs, and GenAI</span>
-                </div>
-                <div class="about-image">
-                    Profile Photo (Coming Soon)
-                </div>
-            </div>
-        </section>
-
-        <!-- SKILLS SECTION -->
-        <section id="skills">
-            <h2>Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-group">
-                    <h3>Engineering</h3>
-                    <div class="skill-list">
-                        <span class="skill-badge">Desktop Systems</span>
-                        <span class="skill-badge">Infrastructure</span>
-                        <span class="skill-badge">C++</span>
-                        <span class="skill-badge">Python</span>
-                        <span class="skill-badge">Debugging</span>
-                        <span class="skill-badge">Performance Tuning</span>
-                    </div>
-                </div>
-                <div class="skill-group">
-                    <h3>AI & Machine Learning</h3>
-                    <div class="skill-list">
-                        <span class="skill-badge">Python (NumPy, Pandas)</span>
-                        <span class="skill-badge">PyTorch</span>
-                        <span class="skill-badge">Neural Networks</span>
-                        <span class="skill-badge">LLMs</span>
-                        <span class="skill-badge">Generative AI</span>
-                        <span class="skill-badge">Learning & Growing</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- PROJECTS SECTION -->
-        <section id="projects">
-            <h2>Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-title">Portfolio Website</div>
-                    <p class="project-desc">This website! A modern, earthy-toned portfolio built with vanilla HTML/CSS to showcase my work and transition into AI.</p>
-                    <div class="project-tags">
-                        <span class="tag">HTML</span>
-                        <span class="tag">CSS</span>
-                        <span class="tag">Web Design</span>
-                    </div>
-                    <a href="#" class="project-link">View on GitHub →</a>
-                </div>
-
-                <div class="project-card coming-soon">
-                    <div>
-                        <p style="margin: 0; color: var(--text-muted);">More projects coming soon...</p>
-                        <p style="margin: 8px 0 0; font-size: 12px; color: var(--text-muted);">Currently building AI/ML projects</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ARTICLES SECTION -->
-        <section id="articles">
-            <h2>Articles & Insights</h2>
-            <div class="articles-list">
-                <div class="article-card">
-                    <div class="article-date">March 2026</div>
-                    <div class="article-title">My Transition from Desktop Engineering to AI</div>
-                    <p class="article-excerpt">How I'm leveraging my 10+ years of systems engineering experience to break into machine learning and AI development. A guide to transitioning careers in tech.</p>
-                    <a href="#" class="read-more">Read More →</a>
-                </div>
-
-                <div class="article-card">
-                    <div class="article-date">Coming Soon</div>
-                    <div class="article-title">Getting Started with PyTorch: A Desktop Engineer's Guide</div>
-                    <p class="article-excerpt">Deep dive into PyTorch for someone coming from a traditional engineering background. Learn neural networks with a systems-level perspective.</p>
-                    <a href="#" class="read-more">Coming Soon →</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- CONTACT SECTION -->
-        <section id="contact">
-            <h2>Let's Connect</h2>
-            <div class="contact-grid">
-                <div class="social-card">
-                    <div class="social-icon">💻</div>
-                    <div class="social-label">GitHub</div>
-                    <a href="#" class="social-handle">@username</a>
-                </div>
-
-                <div class="social-card">
-                    <div class="social-icon">💼</div>
-                    <div class="social-label">LinkedIn</div>
-                    <a href="#" class="social-handle">edward-name</a>
-                </div>
-
-                <div class="social-card">
-                    <div class="social-icon">𝕏</div>
-                    <div class="social-label">Twitter</div>
-                    <a href="#" class="social-handle">@handle</a>
-                </div>
-
-                <div class="social-card">
-                    <div class="social-icon">✉️</div>
-                    <div class="social-label">Email</div>
-                    <a href="mailto:your@email.com" class="social-handle">your@email.com</a>
-                </div>
-            </div>
-        </section>
+        </div>
     </main>
 
     <!-- FOOTER -->
     <footer>
-        <p>&copy; 2026 Edward. All rights reserved. | Crafted with care.</p>
+        <p>Made with ⚡ for productivity & fun | LAZ Tools v1.0</p>
     </footer>
 
     <script>
-        // ===== POKEMON GAME LOGIC =====
+        // ===== HEADER SCROLL EFFECT =====
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.pageYOffset > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // ===== WORD COUNTER =====
+        document.getElementById('wordInput').addEventListener('input', (e) => {
+            const text = e.target.value;
+            const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+            const chars = text.length;
+            const lines = text.split('\n').length;
+            document.getElementById('wordOutput').textContent = `${words} words • ${chars} chars • ${lines} lines`;
+        });
+
+        // ===== CASE CONVERTER =====
+        function convertCase(type) {
+            const input = document.getElementById('caseInput').value;
+            const output = type === 'upper' ? input.toUpperCase() : input.toLowerCase();
+            document.getElementById('caseOutput').textContent = output;
+        }
+
+        // ===== TEXT REVERSER =====
+        function reverseText() {
+            const input = document.getElementById('reverseInput').value;
+            const reversed = input.split('').reverse().join('');
+            document.getElementById('reverseOutput').textContent = reversed;
+        }
+
+        // ===== PASSWORD GENERATOR =====
+        function generatePassword() {
+            const length = document.getElementById('passLength').value || 16;
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+            let password = '';
+            for (let i = 0; i < length; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('passOutput').textContent = password;
+        }
+
+        // ===== COLOR GENERATOR =====
+        function generateColor() {
+            const color = '#' + Math.floor(Math.random()*16777215).toString(16).toUpperCase().padStart(6, '0');
+            document.getElementById('colorPreview').style.backgroundColor = color;
+            document.getElementById('colorOutput').textContent = color;
+        }
+
+        // ===== JSON FORMATTER =====
+        function formatJSON() {
+            try {
+                const input = document.getElementById('jsonInput').value;
+                const parsed = JSON.parse(input);
+                const formatted = JSON.stringify(parsed, null, 2);
+                document.getElementById('jsonOutput').textContent = formatted;
+            } catch (e) {
+                document.getElementById('jsonOutput').textContent = 'Invalid JSON: ' + e.message;
+            }
+        }
+
+        // ===== TIMER =====
+        let timerInterval = null;
+        let timerSeconds = 0;
+
+        function startTimer() {
+            if (timerInterval) return;
+            timerSeconds = parseInt(document.getElementById('timerInput').value) || 5;
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+                if (timerSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    alert('⏱️ Time\'s up!');
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            document.getElementById('timerDisplay').textContent =
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timerSeconds = 0;
+            document.getElementById('timerDisplay').textContent = '00:00';
+        }
+
+        // ===== CALCULATOR =====
+        function calculate(op) {
+            const num1 = parseFloat(document.getElementById('num1').value) || 0;
+            const num2 = parseFloat(document.getElementById('num2').value) || 0;
+            let result;
+            switch(op) {
+                case '+': result = num1 + num2; break;
+                case '-': result = num1 - num2; break;
+                case '*': result = num1 * num2; break;
+                case '/': result = num2 !== 0 ? num1 / num2 : 'Cannot divide by 0'; break;
+            }
+            document.getElementById('calcOutput').textContent = result;
+        }
+
+        // ===== QUOTE GENERATOR =====
+        const quotes = [
+            { text: 'The only way to do great work is to love what you do.', author: 'Steve Jobs' },
+            { text: 'Innovation distinguishes between a leader and a follower.', author: 'Steve Jobs' },
+            { text: 'Life is what happens when you\'re busy making other plans.', author: 'John Lennon' },
+            { text: 'The future belongs to those who believe in the beauty of their dreams.', author: 'Eleanor Roosevelt' },
+            { text: 'It is during our darkest moments that we must focus to see the light.', author: 'Aristotle' },
+            { text: 'The only impossible journey is the one you never begin.', author: 'Tony Robbins' },
+            { text: 'Code is poetry written for computers.', author: 'Unknown' },
+            { text: 'Debugging is like being the detective in a crime drama.', author: 'Filipe Fortes' }
+        ];
+
+        function generateQuote() {
+            const quote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quoteOutput').textContent = `"${quote.text}" — ${quote.author}`;
+        }
+
+        // ===== POKEMON GAME =====
         let gameState = {
-            player: {
-                name: 'Pikachu',
-                sprite: '⚡',
-                maxHp: 100,
-                currentHp: 100
-            },
-            opponent: {
-                name: 'Dragonite',
-                sprite: '🐉',
-                maxHp: 100,
-                currentHp: 100
-            },
+            player: { name: 'Pikachu', sprite: '⚡', maxHp: 100, currentHp: 100 },
+            opponent: { name: 'Dragonite', sprite: '🐉', maxHp: 100, currentHp: 100 },
             gameActive: true,
             battleLog: []
         };
@@ -1096,42 +679,33 @@
 
             document.getElementById('player-hp').style.width = playerHpPercent + '%';
             document.getElementById('player-hp-text').textContent = gameState.player.currentHp + '/' + gameState.player.maxHp;
-
             document.getElementById('opponent-hp').style.width = opponentHpPercent + '%';
             document.getElementById('opponent-hp-text').textContent = gameState.opponent.currentHp + '/' + gameState.opponent.maxHp;
-
             updateBattleLog();
         }
 
         function addLog(text) {
             gameState.battleLog.push(text);
-            if (gameState.battleLog.length > 5) {
-                gameState.battleLog.shift();
-            }
+            if (gameState.battleLog.length > 5) gameState.battleLog.shift();
         }
 
         function updateBattleLog() {
             const logElement = document.getElementById('battle-log');
-            logElement.innerHTML = gameState.battleLog.map(log => `<div class="battle-log-entry">${log}</div>`).join('');
+            logElement.innerHTML = gameState.battleLog.map(log => `<div>${log}</div>`).join('');
             logElement.scrollTop = logElement.scrollHeight;
         }
 
         function playerAttack(moveNum) {
             if (!gameState.gameActive) return;
-
             const move = moves[moveNum];
             const damage = move.damage + Math.floor(Math.random() * 10);
-
             gameState.opponent.currentHp = Math.max(0, gameState.opponent.currentHp - damage);
-            addLog(`🎯 Pikachu used ${move.name}! Dealt ${damage} damage!`);
-
+            addLog(`⚡ Pikachu used ${move.name}! Dealt ${damage} damage!`);
             updateUI();
-
             if (gameState.opponent.currentHp <= 0) {
-                endGame('You won! 🎉');
+                endGame('YOU WON! 🎉');
                 return;
             }
-
             disableMoves(true);
             setTimeout(opponentAttack, 1500);
         }
@@ -1140,22 +714,18 @@
             const moveNum = Math.floor(Math.random() * 4) + 1;
             const move = moves[moveNum];
             const damage = move.damage + Math.floor(Math.random() * 10);
-
             gameState.player.currentHp = Math.max(0, gameState.player.currentHp - damage);
             addLog(`🔥 Dragonite used ${move.name}! Dealt ${damage} damage!`);
-
             updateUI();
-
             if (gameState.player.currentHp <= 0) {
-                endGame('You lost! 💔');
+                endGame('YOU LOST! 💔');
                 return;
             }
-
             disableMoves(false);
         }
 
         function disableMoves(disabled) {
-            document.querySelectorAll('.move-btn').forEach(btn => {
+            document.querySelectorAll('[onclick*="playerAttack"]').forEach(btn => {
                 btn.disabled = disabled;
             });
         }
@@ -1163,7 +733,7 @@
         function endGame(message) {
             gameState.gameActive = false;
             document.getElementById('game-status').textContent = message;
-            document.getElementById('game-status').classList.add('show');
+            document.getElementById('game-status').style.display = 'block';
             disableMoves(true);
         }
 
@@ -1174,51 +744,10 @@
                 gameActive: true,
                 battleLog: ['Battle started! Choose your move.']
             };
-            document.getElementById('game-status').classList.remove('show');
+            document.getElementById('game-status').style.display = 'none';
             disableMoves(false);
             updateUI();
         }
-
-        // ===== SMOOTH NAV ACTIVE STATE =====
-        const navLinks = document.querySelectorAll('.nav-link');
-        const sections = document.querySelectorAll('section');
-
-        window.addEventListener('scroll', () => {
-            let current = 'hero';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= sectionTop - 200) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').slice(1) === current) {
-                    link.classList.add('active');
-                }
-            });
-
-            // Header scroll effect
-            const header = document.getElementById('header');
-            if (window.pageYOffset > 50) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // ===== SMOOTH SCROLL ENHANCEMENT =====
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                const href = this.getAttribute('href');
-                if (href !== '#' && document.querySelector(href)) {
-                    e.preventDefault();
-                    document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
-                }
-            });
-        });
     </script>
 </body>
 </html>
