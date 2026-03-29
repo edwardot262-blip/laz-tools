@@ -1,0 +1,16 @@
+{
+  "name": "discord-selfbot-mirror",
+  "version": "1.0.0",
+  "description": "Selfbot that mirrors Discord messages to webhooks",
+  "main": "mirror.js",
+  "scripts": {
+    "start": "node mirror.js"
+  },
+  "dependencies": {
+    "discord.js-selfbot-v13": "^3.4.1",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
