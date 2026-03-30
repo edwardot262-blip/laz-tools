@@ -64,24 +64,9 @@ function buildPayload(message) {
 async function backfillChannel(channel, webhookUrls) {
   console.log(`\n[INFO] Backfilling #${channel.name || channel.id}...`);
 
-  // Fetch all messages oldest-first
-  const allMessages = [];
-  let before = null;
-
-  while (true) {
-    const options = { limit: 100 };
-    if (before) options.before = before;
-
-    const batch = await channel.messages.fetch(options);
-    if (batch.size === 0) break;
-
-    allMessages.push(...batch.values());
-    before = batch.last().id;
-    process.stdout.write(`  Fetched ${allMessages.length} messages...\r`);
-
-    if (batch.size < 100) break;
-    await sleep(1000); // avoid rate limits while fetching
-  }
+  // Fetch last 20 messages
+  const batch = await channel.messages.fetch({ limit: 20 });
+  const allMessages = [...batch.values()];
 
   console.log(`\n  Total: ${allMessages.length} messages. Sending to webhook...`);
 
