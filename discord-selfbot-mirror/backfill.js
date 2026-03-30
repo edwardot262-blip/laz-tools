@@ -66,7 +66,7 @@ async function backfillChannel(channel, webhookUrls) {
 
   // Fetch last 20 messages
   const batch = await channel.messages.fetch({ limit: 20 });
-  const allMessages = [...batch.values()];
+  const allMessages = [...batch.values()].slice(0, 20);
 
   console.log(`\n  Total: ${allMessages.length} messages. Sending to webhook...`);
 
