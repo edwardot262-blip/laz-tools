@@ -84,13 +84,14 @@ function buildPayload(message) {
     return obj;
   });
 
-  // Collect attachment URLs as extra content lines
-  const attachmentLines = message.attachments
-    .map((a) => a.url)
-    .join('\n');
-
-  let content = message.content || '';
-  if (attachmentLines) content = content ? `${content}\n${attachmentLines}` : attachmentLines;
+  // Add attachments as embeds with image URLs
+  for (const att of message.attachments.values()) {
+    if (att.contentType?.startsWith('image/')) {
+      embeds.push({ image: { url: att.url } });
+    } else {
+      embeds.push({ description: `[${att.name}](${att.url})` });
+    }
+  }
 
   const payload = {
     username: displayName,
@@ -98,6 +99,7 @@ function buildPayload(message) {
     allowed_mentions: { parse: [] },
   };
 
+  let content = message.content || '';
   if (content)        payload.content = content;
   if (embeds.length)  payload.embeds  = embeds;
 
