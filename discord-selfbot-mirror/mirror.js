@@ -195,6 +195,7 @@ client.on('ready', () => {
 
 client.on('messageCreate', async (message) => {
   if (!channelMap.has(message.channelId)) return;
+  console.log(`[MSG] channel=${message.channelId} author=${message.author.username} content=${message.content.slice(0, 50)}`);
   await mirror(message);
 });
 
