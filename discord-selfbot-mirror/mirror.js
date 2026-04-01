@@ -200,6 +200,24 @@ client.on('messageCreate', async (message) => {
 });
 
 
+client.on('messageUpdate', async (oldMsg, newMsg) => {
+  if (!channelMap.has(newMsg.channelId)) return;
+  const full = newMsg.partial ? await newMsg.fetch().catch(() => null) : newMsg;
+  if (!full) return;
+  const webhooks = channelMap.get(full.channelId);
+  if (!webhooks) return;
+  const payload = {
+    username: full.member?.displayName || full.author?.username || 'Unknown',
+    avatar_url: full.author?.displayAvatarURL({ format: 'png', size: 128 }),
+    content: `**[edited]** ${full.content || ''}`.trim(),
+    embeds: buildEmbeds(full),
+    allowed_mentions: { parse: [] },
+  };
+  for (const url of webhooks) {
+    try { await sendToWebhook(url, payload); } catch (err) { console.error(`[ERROR] Failed to forward edit: ${err.message}`); }
+  }
+});
+
 const token = process.env.DISCORD_USER_TOKEN || config.userToken;
 if (!token || token === 'YOUR_USER_TOKEN_HERE') {
   console.error('[ERROR] No user token set.');
