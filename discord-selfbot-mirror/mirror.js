@@ -87,9 +87,15 @@ function buildPayload(message) {
   // Add attachments as embeds with image URLs
   for (const att of message.attachments.values()) {
     if (att.contentType?.startsWith('image/')) {
-      embeds.push({ image: { url: att.url } });
+      embeds.push({
+        image: { url: att.url },
+        color: 0x5865F2
+      });
     } else {
-      embeds.push({ description: `[${att.name}](${att.url})` });
+      embeds.push({
+        description: `📎 [${att.name}](${att.url})`,
+        color: 0x5865F2
+      });
     }
   }
 
