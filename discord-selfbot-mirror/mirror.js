@@ -176,6 +176,9 @@ async function mirror(message) {
       }
       if (res.status >= 400) {
         console.error(`[ERROR] Webhook returned ${res.status}: ${res.body}`);
+      } else {
+        // Send separator after each message
+        await sendToWebhook(url, { content: '┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄', allowed_mentions: { parse: [] } });
       }
     } catch (err) {
       console.error(`[ERROR] Failed to send to webhook: ${err.message}`);
