@@ -1,0 +1,27 @@
+{
+  "_comment": "Copy this file to config.json and fill in your values.",
+
+  "botToken": "YOUR_BOT_TOKEN_HERE",
+
+  "mirrorBots": false,
+
+  "notifyOnDelete": true,
+
+  "channelMappings": [
+    {
+      "_comment": "Example mapping: mirror #announcements from Server A to Server B and Server C",
+      "sourceChannelId": "SOURCE_CHANNEL_ID_1",
+      "destinationWebhookUrls": [
+        "https://discord.com/api/webhooks/WEBHOOK_ID_1/WEBHOOK_TOKEN_1",
+        "https://discord.com/api/webhooks/WEBHOOK_ID_2/WEBHOOK_TOKEN_2"
+      ]
+    },
+    {
+      "_comment": "You can add as many mappings as you need",
+      "sourceChannelId": "SOURCE_CHANNEL_ID_2",
+      "destinationWebhookUrls": [
+        "https://discord.com/api/webhooks/WEBHOOK_ID_3/WEBHOOK_TOKEN_3"
+      ]
+    }
+  ]
+}
