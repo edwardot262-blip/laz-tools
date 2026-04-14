@@ -41,74 +41,102 @@ function downloadBuffer(url) {
 }
 
 // ---------------------------------------------------------------------------
-// Send JSON payload to webhook
+// Send JSON payload to webhook (with 429 retry)
 // ---------------------------------------------------------------------------
-function sendToWebhook(webhookUrl, payload) {
-  return new Promise((resolve, reject) => {
-    const body = JSON.stringify(payload);
-    const url = new URL(webhookUrl);
-    const req = https.request({
-      hostname: url.hostname,
-      path: url.pathname + url.search,
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
-    }, (res) => {
-      let data = '';
-      res.on('data', (c) => (data += c));
-      res.on('end', () => resolve({ status: res.statusCode, body: data }));
+function sleep(ms) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
+async function sendToWebhook(webhookUrl, payload, retries = 4) {
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const result = await new Promise((resolve, reject) => {
+      const body = JSON.stringify(payload);
+      const url = new URL(webhookUrl);
+      const req = https.request({
+        hostname: url.hostname,
+        path: url.pathname + url.search,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) },
+      }, (res) => {
+        let data = '';
+        res.on('data', (c) => (data += c));
+        res.on('end', () => resolve({ status: res.statusCode, body: data }));
+      });
+      req.on('error', reject);
+      req.write(body);
+      req.end();
     });
-    req.on('error', reject);
-    req.write(body);
-    req.end();
-  });
+
+    if (result.status === 429 && attempt < retries) {
+      let retryAfter = 1;
+      try { retryAfter = JSON.parse(result.body).retry_after || 1; } catch (_) {}
+      console.warn(`[WARN] Rate limited. Waiting ${retryAfter}s before retry (attempt ${attempt + 1}/${retries})...`);
+      await sleep(retryAfter * 1000 + 200);
+      continue;
+    }
+
+    return result;
+  }
 }
 
 // ---------------------------------------------------------------------------
-// Send multipart/form-data to webhook (for file uploads)
+// Send multipart/form-data to webhook (for file uploads, with 429 retry)
 // ---------------------------------------------------------------------------
-function sendToWebhookWithFiles(webhookUrl, payload, files) {
-  return new Promise((resolve, reject) => {
-    const boundary = '----DiscordMirrorBoundary' + Date.now();
-    const parts = [];
+async function sendToWebhookWithFiles(webhookUrl, payload, files, retries = 4) {
+  const boundary = '----DiscordMirrorBoundary' + Date.now();
+  const parts = [];
 
-    // payload_json part
-    const payloadJson = JSON.stringify(payload);
+  // payload_json part
+  const payloadJson = JSON.stringify(payload);
+  parts.push(
+    `--${boundary}\r\nContent-Disposition: form-data; name="payload_json"\r\nContent-Type: application/json\r\n\r\n${payloadJson}\r\n`
+  );
+
+  // file parts
+  files.forEach((f, i) => {
     parts.push(
-      `--${boundary}\r\nContent-Disposition: form-data; name="payload_json"\r\nContent-Type: application/json\r\n\r\n${payloadJson}\r\n`
+      `--${boundary}\r\nContent-Disposition: form-data; name="files[${i}]"; filename="${f.name}"\r\nContent-Type: ${f.type}\r\n\r\n`
     );
-
-    // file parts
-    files.forEach((f, i) => {
-      parts.push(
-        `--${boundary}\r\nContent-Disposition: form-data; name="files[${i}]"; filename="${f.name}"\r\nContent-Type: ${f.type}\r\n\r\n`
-      );
-      parts.push(f.buffer);
-      parts.push('\r\n');
-    });
-
-    parts.push(`--${boundary}--\r\n`);
-
-    const bodyParts = parts.map((p) => (typeof p === 'string' ? Buffer.from(p) : p));
-    const body = Buffer.concat(bodyParts);
-
-    const url = new URL(webhookUrl);
-    const req = https.request({
-      hostname: url.hostname,
-      path: url.pathname + url.search,
-      method: 'POST',
-      headers: {
-        'Content-Type': `multipart/form-data; boundary=${boundary}`,
-        'Content-Length': body.length,
-      },
-    }, (res) => {
-      let data = '';
-      res.on('data', (c) => (data += c));
-      res.on('end', () => resolve({ status: res.statusCode, body: data }));
-    });
-    req.on('error', reject);
-    req.write(body);
-    req.end();
+    parts.push(f.buffer);
+    parts.push('\r\n');
   });
+
+  parts.push(`--${boundary}--\r\n`);
+
+  const bodyParts = parts.map((p) => (typeof p === 'string' ? Buffer.from(p) : p));
+  const body = Buffer.concat(bodyParts);
+
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const result = await new Promise((resolve, reject) => {
+      const url = new URL(webhookUrl);
+      const req = https.request({
+        hostname: url.hostname,
+        path: url.pathname + url.search,
+        method: 'POST',
+        headers: {
+          'Content-Type': `multipart/form-data; boundary=${boundary}`,
+          'Content-Length': body.length,
+        },
+      }, (res) => {
+        let data = '';
+        res.on('data', (c) => (data += c));
+        res.on('end', () => resolve({ status: res.statusCode, body: data }));
+      });
+      req.on('error', reject);
+      req.write(body);
+      req.end();
+    });
+
+    if (result.status === 429 && attempt < retries) {
+      let retryAfter = 1;
+      try { retryAfter = JSON.parse(result.body).retry_after || 1; } catch (_) {}
+      console.warn(`[WARN] Rate limited (files). Waiting ${retryAfter}s before retry (attempt ${attempt + 1}/${retries})...`);
+      await sleep(retryAfter * 1000 + 200);
+      continue;
+    }
+
+    return result;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -177,7 +205,8 @@ async function mirror(message) {
       if (res.status >= 400) {
         console.error(`[ERROR] Webhook returned ${res.status}: ${res.body}`);
       } else {
-        // Send separator after each message
+        // Small delay before separator to avoid back-to-back rate limiting
+        await sleep(600);
         await sendToWebhook(url, { content: '┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄', allowed_mentions: { parse: [] } });
       }
     } catch (err) {
