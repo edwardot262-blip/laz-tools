@@ -1,0 +1,27 @@
+{
+  "channelMappings": [
+
+    {
+      "sourceChannelId": "PASTE_CHANNEL_ID_HERE",
+      "webhookUrls": [
+        "PASTE_WEBHOOK_URL_HERE"
+      ]
+    },
+
+    {
+      "sourceChannelId": "PASTE_CHANNEL_ID_HERE",
+      "webhookUrls": [
+        "PASTE_WEBHOOK_URL_HERE"
+      ]
+    },
+
+    {
+      "sourceChannelId": "PASTE_CHANNEL_ID_HERE",
+      "webhookUrls": [
+        "PASTE_WEBHOOK_URL_HERE",
+        "PASTE_SECOND_WEBHOOK_URL_HERE_IF_NEEDED"
+      ]
+    }
+
+  ]
+}
