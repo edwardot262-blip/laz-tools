@@ -1,0 +1,19 @@
+{
+  "channelMappings": [
+
+    {
+      "sourceChannelId": "PASTE_TELEGRAM_CHANNEL_ID_HERE",
+      "webhookUrls": [
+        "PASTE_DISCORD_WEBHOOK_URL_HERE"
+      ]
+    },
+
+    {
+      "sourceChannelId": "PASTE_TELEGRAM_CHANNEL_ID_HERE",
+      "webhookUrls": [
+        "PASTE_DISCORD_WEBHOOK_URL_HERE"
+      ]
+    }
+
+  ]
+}
